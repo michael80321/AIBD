@@ -23,6 +23,13 @@ fi
 
 API="https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}"
 
+# 雲端環境的網路政策可能封鎖 api.telegram.org;屆時由 GitHub Actions
+# (.github/workflows/telegram-report.yml)在 push 後代發,此處優雅跳過。
+if ! curl -sS --max-time 15 -o /dev/null "$API/getMe" 2>/dev/null; then
+  echo "SKIP: 無法連線 api.telegram.org(網路政策封鎖),改由 GitHub Actions 於 push 後發送" >&2
+  exit 0
+fi
+
 # 摘要:取「今日必打 Top 3」段落 + 統計行,純文字避免 Markdown 解析錯誤
 SUMMARY="$(awk '/^## 🎯/,/^---/' "$REPORT" | grep -v '^---' | sed 's/[*#|]//g' | head -c 3500)"
 STATS="$(grep -m1 '最終' "$REPORT" | sed 's/[*#-]//g' || true)"

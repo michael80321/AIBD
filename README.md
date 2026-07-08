@@ -33,6 +33,7 @@ claude
      TELEGRAM_CHAT_ID=987654321
      ```
 4. 每日流程會自動執行 `scripts/send-telegram.sh`:發送「今日必打 Top 3 + 統計」摘要,並附上完整日報 .md 檔;未設定憑證時自動跳過。
+5. **雲端環境備援(目前生效的路徑)**:雲端 session 的網路政策若封鎖 `api.telegram.org`,由 GitHub Actions(`.github/workflows/telegram-report.yml`)在日報 push 後自動代發。需在 GitHub repo 的 **Settings → Secrets and variables → Actions** 加兩個 secret:`TELEGRAM_BOT_TOKEN`、`TELEGRAM_CHAT_ID`。
 
 ## 每日自動執行(雲端 Routine)
 

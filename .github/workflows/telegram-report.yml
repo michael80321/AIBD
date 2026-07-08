@@ -1,0 +1,42 @@
+name: 發送 BD 日報到 Telegram
+
+on:
+  push:
+    paths:
+      - "reports/*.md"
+  workflow_dispatch: {}
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 發送最新日報
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          set -euo pipefail
+          if [ -z "${TELEGRAM_BOT_TOKEN:-}" ] || [ -z "${TELEGRAM_CHAT_ID:-}" ]; then
+            echo "::warning::未設定 TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID repo secrets,跳過發送"
+            exit 0
+          fi
+          REPORT="$(ls reports/????-??-??.md 2>/dev/null | sort | tail -1)"
+          if [ -z "$REPORT" ]; then
+            echo "沒有日報檔,跳過"; exit 0
+          fi
+          DATE="$(basename "$REPORT" .md)"
+          API="https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}"
+          SUMMARY="$(awk '/^## 🎯/,/^---/' "$REPORT" | grep -v '^---' | sed 's/[*#|]//g' | head -c 3500)"
+          STATS="$(grep -m1 '最終' "$REPORT" | sed 's/[*#-]//g' || true)"
+          curl -sS -X POST "$API/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=📡 BD 攻堅日報 ${DATE}
+          ${SUMMARY}
+          ${STATS}" > /dev/null
+          curl -sS -X POST "$API/sendDocument" \
+            -F "chat_id=${TELEGRAM_CHAT_ID}" \
+            -F "document=@${REPORT};filename=BD日報-${DATE}.md" \
+            -F "caption=完整日報(Markdown)" > /dev/null
+          echo "已發送 ${DATE} 日報"

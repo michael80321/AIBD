@@ -46,6 +46,14 @@ allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Glob, Grep
    `date_added,company,vertical,type,region,signal,score,status,source_url,notes`
    - status 初始值 `new`;含逗號的欄位用雙引號包住。
 
-## 步驟 5:輸出統計
+## 步驟 5:更新儀表板與推送
+
+1. 執行 `python3 scripts/build_dashboard.py` 重新生成 `docs/index.html` 與 `docs/artifact.html`。
+2. **若有 Artifact 工具**(在 Claude Code 雲端/網頁 session 中):用 Artifact 工具發佈 `docs/artifact.html`,favicon 用 `📡`;若 `docs/ARTIFACT_URL.txt` 存在,傳入其中的 URL 更新同一頁面,不要另開新網址;首次發佈後把 URL 寫入 `docs/ARTIFACT_URL.txt` 並 commit。
+3. 執行 `bash scripts/send-telegram.sh` 發送 Telegram 日報(未設定憑證時會自動跳過,不算錯誤)。
+4. **若有 PushNotification 工具**:發送一行摘要推播,格式如:`BD日報 7/8:A級2筆 B級4筆|Top1: AIsa(阿里領投種子輪)`。
+5. 將日報、leads.csv、docs/ 的變更 commit 並 push。
+
+## 步驟 6:輸出統計
 
 回報:各行業搜尋組數、候選數、去重丟棄數、最終 A/B/C 筆數、與目標(A 3–5、B 5–8)的差距。若未達標,說明原因(如當日訊號少),**不得湊數**。

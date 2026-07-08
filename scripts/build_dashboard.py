@@ -1,0 +1,317 @@
+#!/usr/bin/env python3
+"""從 leads/leads.csv 與 reports/*.md 生成 BD 儀表板。
+
+輸出:
+  docs/index.html    — 完整獨立頁面(可本機開啟或架 GitHub Pages)
+  docs/artifact.html — 內容片段(給 Claude Artifact 發佈用,不含 doctype/html/head/body)
+"""
+import csv
+import json
+import re
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+DOCS = ROOT / "docs"
+MAX_EMBEDDED_REPORTS = 14
+
+SCORE_ORDER = {"A": 0, "B": 1, "C": 2}
+VERTICALS = ["AI", "iGaming", "成人", "賽事"]
+
+
+def load_leads():
+    path = ROOT / "leads" / "leads.csv"
+    if not path.exists():
+        return []
+    with path.open(encoding="utf-8") as f:
+        rows = [r for r in csv.DictReader(f) if (r.get("company") or "").strip()]
+    rows.sort(key=lambda r: (r.get("date_added", ""), SCORE_ORDER.get(r.get("score", "C"), 3)))
+    rows.reverse()
+    return rows
+
+
+def load_reports():
+    rep_dir = ROOT / "reports"
+    out = []
+    if rep_dir.exists():
+        for p in sorted(rep_dir.glob("*.md"), reverse=True):
+            if re.fullmatch(r"\d{4}-\d{2}-\d{2}", p.stem):
+                out.append({"date": p.stem, "md": p.read_text(encoding="utf-8")})
+    return out[:MAX_EMBEDDED_REPORTS]
+
+
+def build(leads, reports):
+    taipei = timezone(timedelta(hours=8))
+    now = datetime.now(taipei)
+    latest_date = reports[0]["date"] if reports else (leads[0]["date_added"] if leads else now.strftime("%Y-%m-%d"))
+
+    today_rows = [r for r in leads if r["date_added"] == latest_date]
+    count = lambda rows, s: sum(1 for r in rows if r.get("score") == s)
+
+    due_cutoff = (datetime.strptime(latest_date, "%Y-%m-%d") - timedelta(days=7)).strftime("%Y-%m-%d")
+    due = [r for r in leads if r.get("score") == "A" and r.get("status") == "new" and r.get("date_added", "9999") <= due_cutoff]
+
+    data = {
+        "generated": now.strftime("%Y-%m-%d %H:%M"),
+        "latestDate": latest_date,
+        "today": {"A": count(today_rows, "A"), "B": count(today_rows, "B"), "C": count(today_rows, "C")},
+        "totals": {"all": len(leads), "A": count(leads, "A"), "B": count(leads, "B"), "C": count(leads, "C")},
+        "dueFollowups": due,
+        "leads": leads,
+        "reports": reports,
+        "verticals": VERTICALS,
+    }
+    payload = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+
+    body = """<title>BD 攻堅日報儀表板</title>
+<style>
+:root{
+  --bg:#F4F7F7; --surface:#FFFFFF; --ink:#17272B; --muted:#5B6E73; --line:#DCE4E5;
+  --accent:#0F7B84; --accent-soft:#0F7B8418; --on-accent:#FFFFFF;
+  --a:#B23A2E; --a-soft:#B23A2E16; --b:#96700F; --b-soft:#96700F16; --c:#5B6E73; --c-soft:#5B6E7314;
+  --v-ai:#3E7BC0; --v-ig:#8A5BB5; --v-ad:#C05B7E; --v-sp:#4E9A6A;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0D1517; --surface:#152124; --ink:#E4EDEE; --muted:#8AA0A4; --line:#233539;
+  --accent:#43B7C0; --accent-soft:#43B7C01F; --on-accent:#0D1517;
+  --a:#E0685C; --a-soft:#E0685C1F; --b:#D5A63A; --b-soft:#D5A63A1C; --c:#8AA0A4; --c-soft:#8AA0A41A;
+  --v-ai:#6FA5DC; --v-ig:#AF87D4; --v-ad:#DB8AA5; --v-sp:#7BBD92;
+}}
+:root[data-theme="dark"]{
+  --bg:#0D1517; --surface:#152124; --ink:#E4EDEE; --muted:#8AA0A4; --line:#233539;
+  --accent:#43B7C0; --accent-soft:#43B7C01F; --on-accent:#0D1517;
+  --a:#E0685C; --a-soft:#E0685C1F; --b:#D5A63A; --b-soft:#D5A63A1C; --c:#8AA0A4; --c-soft:#8AA0A41A;
+  --v-ai:#6FA5DC; --v-ig:#AF87D4; --v-ad:#DB8AA5; --v-sp:#7BBD92;
+}
+:root[data-theme="light"]{
+  --bg:#F4F7F7; --surface:#FFFFFF; --ink:#17272B; --muted:#5B6E73; --line:#DCE4E5;
+  --accent:#0F7B84; --accent-soft:#0F7B8418; --on-accent:#FFFFFF;
+  --a:#B23A2E; --a-soft:#B23A2E16; --b:#96700F; --b-soft:#96700F16; --c:#5B6E73; --c-soft:#5B6E7314;
+  --v-ai:#3E7BC0; --v-ig:#8A5BB5; --v-ad:#C05B7E; --v-sp:#4E9A6A;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.65 "PingFang TC","Noto Sans TC","Microsoft JhengHei",-apple-system,"Segoe UI",sans-serif;}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 20px 64px;}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.mono{font-family:ui-monospace,"SF Mono",Consolas,monospace;font-variant-numeric:tabular-nums}
+
+header.top{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 18px;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:18px}
+.top h1{font-size:26px;margin:0;letter-spacing:.02em;text-wrap:balance}
+.top .date{font-size:15px;color:var(--muted)}
+.counts{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+.count{display:inline-flex;align-items:baseline;gap:6px;padding:4px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:13px;color:var(--muted)}
+.count strong{font-size:17px;color:var(--ink);font-family:ui-monospace,Consolas,monospace;font-variant-numeric:tabular-nums}
+.count.sA strong{color:var(--a)} .count.sB strong{color:var(--b)}
+
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:34px 0 10px;display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:"";flex:1;border-top:1px solid var(--line)}
+
+.top3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--a);border-radius:6px;padding:16px 18px}
+.card h3{margin:0 0 4px;font-size:18px}
+.card .meta{font-size:13px;color:var(--muted);margin-bottom:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.card p{margin:6px 0;font-size:14px}
+.card .why{color:var(--muted)}
+.pill{display:inline-block;padding:1px 9px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.05em}
+.pill.A{background:var(--a-soft);color:var(--a)} .pill.B{background:var(--b-soft);color:var(--b)} .pill.C{background:var(--c-soft);color:var(--c)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:1px}
+.due{background:var(--surface);border:1px solid var(--b);border-radius:6px;padding:12px 16px;font-size:14px}
+.due ul{margin:6px 0 0;padding-left:20px}
+
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:4px 13px;font-size:13px;cursor:pointer;font-family:inherit}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.filters input{margin-left:auto;padding:6px 12px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;min-width:180px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table.leads{border-collapse:collapse;width:100%;min-width:960px;font-size:14px}
+.leads th{position:sticky;top:0;background:var(--surface);text-align:left;font-size:12px;letter-spacing:.08em;color:var(--muted);border-bottom:2px solid var(--line);padding:10px 12px;white-space:nowrap}
+.leads td{border-bottom:1px solid var(--line);padding:9px 12px;vertical-align:top}
+.leads tr:last-child td{border-bottom:none}
+.leads td.sig{min-width:280px} .leads td.nowrap{white-space:nowrap}
+.empty{padding:24px;text-align:center;color:var(--muted)}
+
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0}
+.tabs .chip[aria-pressed="true"]{background:var(--surface);color:var(--ink);border-color:var(--ink);font-weight:600}
+.report{background:var(--surface);border:1px solid var(--line);border-radius:0 6px 6px 6px;padding:8px 26px 22px;margin-top:8px}
+.report h1{font-size:22px;border-bottom:2px solid var(--ink);padding-bottom:8px}
+.report h2{font-size:18px;margin-top:26px}
+.report h3{font-size:16px;color:var(--accent)}
+.report table{border-collapse:collapse;font-size:13.5px;margin:10px 0}
+.report th{background:var(--accent-soft);text-align:left;padding:6px 10px;border:1px solid var(--line);white-space:nowrap}
+.report td{padding:6px 10px;border:1px solid var(--line)}
+.report .tblwrap{overflow-x:auto}
+.report hr{border:none;border-top:1px solid var(--line);margin:22px 0}
+.report li{margin:4px 0;font-size:14.5px}
+.report p{font-size:14.5px}
+footer{margin-top:40px;font-size:12.5px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+@media (prefers-reduced-motion: no-preference){.chip{transition:background .15s,color .15s}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <h1>BD 攻堅日報</h1>
+  <span class="date mono" id="latestDate"></span>
+  <div class="counts" id="counts"></div>
+</header>
+
+<div class="eyebrow">今日必打(A 級)</div>
+<div class="top3" id="top3"></div>
+<div id="dueBox"></div>
+
+<div class="eyebrow">Lead 資料庫</div>
+<div class="filters" id="filters"></div>
+<div class="tablewrap"><table class="leads">
+  <thead><tr><th>日期</th><th>公司</th><th>行業</th><th>類型</th><th>地區</th><th>訊號</th><th>評分</th><th>狀態</th><th>來源</th><th>備註</th></tr></thead>
+  <tbody id="tbody"></tbody>
+</table><div class="empty" id="empty" hidden>沒有符合篩選的 Lead</div></div>
+
+<div class="eyebrow">日報全文</div>
+<div class="tabs" id="tabs"></div>
+<article class="report" id="report"></article>
+
+<footer>
+  <span>資料來源:leads/leads.csv + reports/*.md</span>
+  <span>生成於 <span class="mono" id="generated"></span>(台北時間)</span>
+  <span>由 /bd-daily 每日自動更新</span>
+</footer>
+</div>
+
+<script>
+const DATA = __DATA__;
+const VCOLOR = {"AI":"var(--v-ai)","iGaming":"var(--v-ig)","成人":"var(--v-ad)","賽事":"var(--v-sp)"};
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $ = id => document.getElementById(id);
+
+$("latestDate").textContent = DATA.latestDate;
+$("generated").textContent = DATA.generated;
+$("counts").innerHTML =
+  `<span class="count sA">今日 A <strong>${DATA.today.A}</strong></span>` +
+  `<span class="count sB">今日 B <strong>${DATA.today.B}</strong></span>` +
+  `<span class="count">今日 C <strong>${DATA.today.C}</strong></span>` +
+  `<span class="count">累積 <strong>${DATA.totals.all}</strong></span>`;
+
+const vdot = v => `<span class="dot" style="background:${VCOLOR[v]||"var(--muted)"}"></span>${esc(v)}`;
+
+const todayA = DATA.leads.filter(l => l.score === "A" && l.date_added === DATA.latestDate);
+$("top3").innerHTML = todayA.length ? todayA.slice(0, 3).map(l => `
+  <div class="card">
+    <h3>${esc(l.company)}</h3>
+    <div class="meta"><span class="pill A">A</span><span>${vdot(l.vertical)}</span><span>${esc(l.type)}</span><span>${esc(l.region)}</span></div>
+    <p>${esc(l.signal)}</p>
+    <p class="why">${esc(l.notes)}</p>
+    <p><a href="${esc(l.source_url)}" target="_blank" rel="noopener">來源 ↗</a></p>
+  </div>`).join("") : `<div class="card" style="border-left-color:var(--c)"><p>今日無 A 級 Lead(依「寧缺勿濫」原則如實回報)。</p></div>`;
+
+if (DATA.dueFollowups.length) {
+  $("dueBox").innerHTML = `<div class="eyebrow">跟進到期提醒</div><div class="due">以下 A 級 Lead 入庫已滿 7 天仍未接觸:<ul>` +
+    DATA.dueFollowups.map(l => `<li><strong>${esc(l.company)}</strong>(${esc(l.date_added)} 入庫)— ${esc(l.signal)}</li>`).join("") + `</ul></div>`;
+}
+
+const state = { score: "", vertical: "", status: "", q: "" };
+const FILTER_GROUPS = [
+  ["score", ["A", "B", "C"]],
+  ["vertical", DATA.verticals],
+  ["status", [...new Set(DATA.leads.map(l => l.status))]],
+];
+$("filters").innerHTML = FILTER_GROUPS.map(([key, vals]) =>
+  vals.map(v => `<button class="chip" data-key="${key}" data-val="${esc(v)}" aria-pressed="false">${esc(v)}</button>`).join("")
+).join("") + `<input type="search" id="q" placeholder="搜尋公司/訊號/地區…" aria-label="搜尋">`;
+
+function renderTable() {
+  const rows = DATA.leads.filter(l =>
+    (!state.score || l.score === state.score) &&
+    (!state.vertical || l.vertical === state.vertical) &&
+    (!state.status || l.status === state.status) &&
+    (!state.q || [l.company, l.signal, l.region, l.notes, l.type].join(" ").toLowerCase().includes(state.q)));
+  $("tbody").innerHTML = rows.map(l => `<tr>
+    <td class="mono nowrap">${esc(l.date_added)}</td>
+    <td><strong>${esc(l.company)}</strong></td>
+    <td class="nowrap">${vdot(l.vertical)}</td>
+    <td class="nowrap">${esc(l.type)}</td>
+    <td>${esc(l.region)}</td>
+    <td class="sig">${esc(l.signal)}</td>
+    <td><span class="pill ${esc(l.score)}">${esc(l.score)}</span></td>
+    <td class="nowrap">${esc(l.status)}</td>
+    <td class="nowrap"><a href="${esc(l.source_url)}" target="_blank" rel="noopener">連結 ↗</a></td>
+    <td>${esc(l.notes)}</td></tr>`).join("");
+  $("empty").hidden = rows.length > 0;
+}
+$("filters").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  const { key, val } = b.dataset;
+  state[key] = state[key] === val ? "" : val;
+  document.querySelectorAll(`.chip[data-key="${key}"]`).forEach(x =>
+    x.setAttribute("aria-pressed", String(state[key] === x.dataset.val)));
+  renderTable();
+});
+$("filters").addEventListener("input", e => {
+  if (e.target.id === "q") { state.q = e.target.value.trim().toLowerCase(); renderTable(); }
+});
+renderTable();
+
+// ---- 迷你 Markdown 渲染(針對日報模板的子集:標題/表格/清單/粗體/連結/分隔線) ----
+function inline(s) {
+  return esc(s)
+    .replace(/\\*\\*([^*]+)\\*\\*/g, "<strong>$1</strong>")
+    .replace(/\\[([^\\]]+)\\]\\((https?:[^)\\s]+)\\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/(^|[(\\s(]|(?:^|\\s)\\()(https?:\\/\\/[^\\s()<>]+)/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>')
+    .replace(/`([^`]+)`/g, "<code>$1</code>");
+}
+function renderMd(md) {
+  const lines = md.split(/\\r?\\n/); const out = []; let list = false, i = 0;
+  const closeList = () => { if (list) { out.push("</ul>"); list = false; } };
+  while (i < lines.length) {
+    const L = lines[i];
+    if (/^\\|/.test(L) && /^\\|[\\s:|-]+\\|$/.test(lines[i + 1] || "")) {
+      closeList();
+      const cells = r => r.split("|").slice(1, -1).map(c => c.trim());
+      out.push('<div class="tblwrap"><table><thead><tr>' + cells(L).map(h => `<th>${inline(h)}</th>`).join("") + "</tr></thead><tbody>");
+      i += 2;
+      while (i < lines.length && /^\\|/.test(lines[i])) {
+        out.push("<tr>" + cells(lines[i]).map(c => `<td>${inline(c)}</td>`).join("") + "</tr>"); i++;
+      }
+      out.push("</tbody></table></div>"); continue;
+    }
+    const h = L.match(/^(#{1,4})\\s+(.*)/);
+    if (h) { closeList(); out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`); }
+    else if (/^---+\\s*$/.test(L)) { closeList(); out.push("<hr>"); }
+    else if (/^>\\s?/.test(L)) { closeList(); out.push(`<p class="why">${inline(L.replace(/^>\\s?/, ""))}</p>`); }
+    else if (/^(?:[-*]|\\d+\\.)\\s+/.test(L)) { if (!list) { out.push("<ul>"); list = true; } out.push(`<li>${inline(L.replace(/^(?:[-*]|\\d+\\.)\\s+/, ""))}</li>`); }
+    else if (L.trim() === "") { closeList(); }
+    else { closeList(); out.push(`<p>${inline(L)}</p>`); }
+    i++;
+  }
+  closeList(); return out.join("\\n");
+}
+
+const tabs = $("tabs");
+tabs.innerHTML = DATA.reports.map((r, idx) =>
+  `<button class="chip mono" data-i="${idx}" aria-pressed="${idx === 0}">${r.date}</button>`).join("") || "";
+function showReport(i) {
+  $("report").innerHTML = DATA.reports.length ? renderMd(DATA.reports[i].md) : '<p class="empty">尚無日報</p>';
+  tabs.querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.i === i)));
+}
+tabs.addEventListener("click", e => { const b = e.target.closest(".chip"); if (b) showReport(+b.dataset.i); });
+showReport(0);
+</script>
+"""
+    body = body.replace("__DATA__", payload)
+    full = ('<!doctype html>\n<html lang="zh-Hant">\n<head>\n<meta charset="utf-8">\n'
+            '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+            "</head>\n<body>\n" + body + "\n</body>\n</html>\n")
+    return body, full
+
+
+def main():
+    DOCS.mkdir(exist_ok=True)
+    leads, reports = load_leads(), load_reports()
+    body, full = build(leads, reports)
+    (DOCS / "artifact.html").write_text(body, encoding="utf-8")
+    (DOCS / "index.html").write_text(full, encoding="utf-8")
+    print(f"dashboard built: {len(leads)} leads, {len(reports)} reports embedded")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,233 @@
+<title>BD 攻堅日報儀表板</title>
+<style>
+:root{
+  --bg:#F4F7F7; --surface:#FFFFFF; --ink:#17272B; --muted:#5B6E73; --line:#DCE4E5;
+  --accent:#0F7B84; --accent-soft:#0F7B8418; --on-accent:#FFFFFF;
+  --a:#B23A2E; --a-soft:#B23A2E16; --b:#96700F; --b-soft:#96700F16; --c:#5B6E73; --c-soft:#5B6E7314;
+  --v-ai:#3E7BC0; --v-ig:#8A5BB5; --v-ad:#C05B7E; --v-sp:#4E9A6A;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0D1517; --surface:#152124; --ink:#E4EDEE; --muted:#8AA0A4; --line:#233539;
+  --accent:#43B7C0; --accent-soft:#43B7C01F; --on-accent:#0D1517;
+  --a:#E0685C; --a-soft:#E0685C1F; --b:#D5A63A; --b-soft:#D5A63A1C; --c:#8AA0A4; --c-soft:#8AA0A41A;
+  --v-ai:#6FA5DC; --v-ig:#AF87D4; --v-ad:#DB8AA5; --v-sp:#7BBD92;
+}}
+:root[data-theme="dark"]{
+  --bg:#0D1517; --surface:#152124; --ink:#E4EDEE; --muted:#8AA0A4; --line:#233539;
+  --accent:#43B7C0; --accent-soft:#43B7C01F; --on-accent:#0D1517;
+  --a:#E0685C; --a-soft:#E0685C1F; --b:#D5A63A; --b-soft:#D5A63A1C; --c:#8AA0A4; --c-soft:#8AA0A41A;
+  --v-ai:#6FA5DC; --v-ig:#AF87D4; --v-ad:#DB8AA5; --v-sp:#7BBD92;
+}
+:root[data-theme="light"]{
+  --bg:#F4F7F7; --surface:#FFFFFF; --ink:#17272B; --muted:#5B6E73; --line:#DCE4E5;
+  --accent:#0F7B84; --accent-soft:#0F7B8418; --on-accent:#FFFFFF;
+  --a:#B23A2E; --a-soft:#B23A2E16; --b:#96700F; --b-soft:#96700F16; --c:#5B6E73; --c-soft:#5B6E7314;
+  --v-ai:#3E7BC0; --v-ig:#8A5BB5; --v-ad:#C05B7E; --v-sp:#4E9A6A;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.65 "PingFang TC","Noto Sans TC","Microsoft JhengHei",-apple-system,"Segoe UI",sans-serif;}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 20px 64px;}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.mono{font-family:ui-monospace,"SF Mono",Consolas,monospace;font-variant-numeric:tabular-nums}
+
+header.top{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 18px;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:18px}
+.top h1{font-size:26px;margin:0;letter-spacing:.02em;text-wrap:balance}
+.top .date{font-size:15px;color:var(--muted)}
+.counts{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+.count{display:inline-flex;align-items:baseline;gap:6px;padding:4px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:13px;color:var(--muted)}
+.count strong{font-size:17px;color:var(--ink);font-family:ui-monospace,Consolas,monospace;font-variant-numeric:tabular-nums}
+.count.sA strong{color:var(--a)} .count.sB strong{color:var(--b)}
+
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:34px 0 10px;display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:"";flex:1;border-top:1px solid var(--line)}
+
+.top3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--a);border-radius:6px;padding:16px 18px}
+.card h3{margin:0 0 4px;font-size:18px}
+.card .meta{font-size:13px;color:var(--muted);margin-bottom:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.card p{margin:6px 0;font-size:14px}
+.card .why{color:var(--muted)}
+.pill{display:inline-block;padding:1px 9px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.05em}
+.pill.A{background:var(--a-soft);color:var(--a)} .pill.B{background:var(--b-soft);color:var(--b)} .pill.C{background:var(--c-soft);color:var(--c)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:1px}
+.due{background:var(--surface);border:1px solid var(--b);border-radius:6px;padding:12px 16px;font-size:14px}
+.due ul{margin:6px 0 0;padding-left:20px}
+
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:4px 13px;font-size:13px;cursor:pointer;font-family:inherit}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.filters input{margin-left:auto;padding:6px 12px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;min-width:180px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table.leads{border-collapse:collapse;width:100%;min-width:960px;font-size:14px}
+.leads th{position:sticky;top:0;background:var(--surface);text-align:left;font-size:12px;letter-spacing:.08em;color:var(--muted);border-bottom:2px solid var(--line);padding:10px 12px;white-space:nowrap}
+.leads td{border-bottom:1px solid var(--line);padding:9px 12px;vertical-align:top}
+.leads tr:last-child td{border-bottom:none}
+.leads td.sig{min-width:280px} .leads td.nowrap{white-space:nowrap}
+.empty{padding:24px;text-align:center;color:var(--muted)}
+
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0}
+.tabs .chip[aria-pressed="true"]{background:var(--surface);color:var(--ink);border-color:var(--ink);font-weight:600}
+.report{background:var(--surface);border:1px solid var(--line);border-radius:0 6px 6px 6px;padding:8px 26px 22px;margin-top:8px}
+.report h1{font-size:22px;border-bottom:2px solid var(--ink);padding-bottom:8px}
+.report h2{font-size:18px;margin-top:26px}
+.report h3{font-size:16px;color:var(--accent)}
+.report table{border-collapse:collapse;font-size:13.5px;margin:10px 0}
+.report th{background:var(--accent-soft);text-align:left;padding:6px 10px;border:1px solid var(--line);white-space:nowrap}
+.report td{padding:6px 10px;border:1px solid var(--line)}
+.report .tblwrap{overflow-x:auto}
+.report hr{border:none;border-top:1px solid var(--line);margin:22px 0}
+.report li{margin:4px 0;font-size:14.5px}
+.report p{font-size:14.5px}
+footer{margin-top:40px;font-size:12.5px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+@media (prefers-reduced-motion: no-preference){.chip{transition:background .15s,color .15s}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <h1>BD 攻堅日報</h1>
+  <span class="date mono" id="latestDate"></span>
+  <div class="counts" id="counts"></div>
+</header>
+
+<div class="eyebrow">今日必打(A 級)</div>
+<div class="top3" id="top3"></div>
+<div id="dueBox"></div>
+
+<div class="eyebrow">Lead 資料庫</div>
+<div class="filters" id="filters"></div>
+<div class="tablewrap"><table class="leads">
+  <thead><tr><th>日期</th><th>公司</th><th>行業</th><th>類型</th><th>地區</th><th>訊號</th><th>評分</th><th>狀態</th><th>來源</th><th>備註</th></tr></thead>
+  <tbody id="tbody"></tbody>
+</table><div class="empty" id="empty" hidden>沒有符合篩選的 Lead</div></div>
+
+<div class="eyebrow">日報全文</div>
+<div class="tabs" id="tabs"></div>
+<article class="report" id="report"></article>
+
+<footer>
+  <span>資料來源:leads/leads.csv + reports/*.md</span>
+  <span>生成於 <span class="mono" id="generated"></span>(台北時間)</span>
+  <span>由 /bd-daily 每日自動更新</span>
+</footer>
+</div>
+
+<script>
+const DATA = {"generated": "2026-07-08 16:56", "latestDate": "2026-07-08", "today": {"A": 2, "B": 4, "C": 4}, "totals": {"all": 10, "A": 2, "B": 4, "C": 4}, "dueFollowups": [], "leads": [{"date_added": "2026-07-08", "company": "LinqAlpha", "vertical": "AI", "type": "客戶", "region": "待查", "signal": "7 月首週披露 $22M A 輪,買方投研 AI Agent", "score": "C", "status": "new", "source_url": "https://gravity.fast/blog/ai-agent-funding-tracker-q3-2026/", "notes": "算力需求中等;地區待查"}, {"date_added": "2026-07-08", "company": "Groove", "vertical": "iGaming", "type": "ISV", "region": "東歐/中亞", "signal": "7/15-16 參加 SBC Summit Tbilisi,主攻東歐/中亞擴張", "score": "C", "status": "new", "source_url": "https://g3newswire.com/groove-heads-to-sbc-summit-tbilisi-2026-targeting-eastern-european-and-central-asian-growth/", "notes": "地區非核心但屬 ISV 型標的"}, {"date_added": "2026-07-08", "company": "Toffee(Banglalink)", "vertical": "賽事", "type": "客戶", "region": "孟加拉", "signal": "6 月世界盃期間訂閱啟用延遲與轉播中斷投訴", "score": "C", "status": "new", "source_url": "https://www.thedailystar.net/news/tech-startup/news/fans-frustrated-streaming-problems-during-world-cup-openers-4197146", "notes": "地區非核心"}, {"date_added": "2026-07-08", "company": "Kling AI(快手)", "vertical": "AI", "type": "客戶", "region": "香港/中國", "signal": "7/3 向港交所披露啟動約 $30 億融資(百度、阿里雲、騰訊參與)", "score": "C", "status": "new", "source_url": "https://www.scmp.com/tech/article/3359250/kuaishou-files-us3-billion-kling-ai-funding-round-hong-kong-stock-exchange", "notes": "體量過大、自建基建;觀察其生態下游"}, {"date_added": "2026-07-08", "company": "Games Valley", "vertical": "iGaming", "type": "ISV", "region": "待查", "signal": "7/8 宣布接入 BGaming 內容,聚合平台持續擴張", "score": "B", "status": "new", "source_url": "https://igamingbusiness.com/company-news/games-valley-adds-bgaming-content-in-latest-aggregation-partnership/", "notes": "聚合商=ISV 型標的;總部/主要市場待查"}, {"date_added": "2026-07-08", "company": "Altenar", "vertical": "iGaming", "type": "ISV", "region": "全球(總部歐洲)", "signal": "7/2 獲 Alberta 供應商批准,該省 7/13 開放監管市場,平台擴張期", "score": "B", "status": "new", "source_url": "https://www.yogonet.com/international/news/2026/07/02/125177-altenar-receives-alberta-supplier-approval-ahead-of-regulated-online-gaming-market-launch", "notes": "sportsbook 平台商,綁定可帶整批營運商"}, {"date_added": "2026-07-08", "company": "Mirendil", "vertical": "AI", "type": "客戶", "region": "美國", "signal": "7 月首週宣布 $200M 種子輪(a16z+KP 領投、NVIDIA 參投),自動化 AI 研發,GPU 需求極大", "score": "B", "status": "new", "source_url": "https://techfundingnews.com/ex-anthropic-researchers-raise-200m-just-weeks-after-quitting-to-build-ai-that-creates-better-ai/", "notes": "地區不符且 NVIDIA 入股自帶算力管道,故降 B"}, {"date_added": "2026-07-08", "company": "Zee5", "vertical": "賽事", "type": "客戶", "region": "印度", "signal": "世界盃印度獨家串流,6/12 開賽夜大規模卡頓/當機;八強 7/9-11 為下一波高峰(訊號超 7 天、賽事進行中,已註明)", "score": "B", "status": "new", "source_url": "https://www.businesstoday.in/sports/football/story/fifa-world-cup-2026-on-zee5-indian-fans-report-buffering-major-outages-while-streaming-on-debut-night-536438-2026-06-12", "notes": "地區非核心;災難救援型切入,窗口至 7/19 決賽"}, {"date_added": "2026-07-08", "company": "Amity Robotics", "vertical": "AI", "type": "客戶", "region": "泰國(部署新加坡/香港/馬來西亞等 30+ 場域)", "signal": "7/1 完成 $7M 種子輪(East Ventures 領投、500 Global 跟投),AI 禮賓機器人擴大部署", "score": "A", "status": "new", "source_url": "https://theaiinsider.tech/2026/07/01/thailands-amity-robotics-closes-usd-7m-seed-round-to-expand-its-physical-ai-concierge-business/", "notes": "部署城市與我方節點重疊;賣點=區域內低延遲 LLM 推理"}, {"date_added": "2026-07-08", "company": "AIsa", "vertical": "AI", "type": "ISV", "region": "全球/亞洲資本(Alibaba、住友、Saison 投資)", "signal": "7/7 宣布 $6.5M 種子輪(Alibaba+Tribe Capital 領投);AI Agent 交易網路,API 量 5 個月成長 200x,正 onboard 算力供給方", "score": "A", "status": "new", "source_url": "https://www.globenewswire.com/news-release/2026/07/07/3323663/0/en/aisa-raises-6-5m-co-led-by-alibaba-and-tribe-capital-to-build-the-transaction-network-for-ai-agents.html", "notes": "可把 GPU 算力上架其網路作供給方;兼具客戶與通路屬性"}], "reports": [{"date": "2026-07-08", "md": "# BD 攻堅日報 — 2026-07-08\n\n## 🎯 今日必打 Top 3\n\n1. **AIsa**(AI/ISV)— 昨日(7/7)宣布 Alibaba 領投 $6.5M 種子輪,平台聚合「算力/API/資料」交易,5 個月 API 量成長 200 倍;我們可同時當它的算力供給方與基礎設施供應商。管道:LinkedIn + Email 創辦人。\n2. **Amity Robotics**(AI/客戶)— 7/1 完成 $7M 種子輪,AI 接待機器人已部署新加坡、香港、馬來西亞等 30+ 場域,與我們節點完全重疊,需要區域內低延遲 LLM 推理。管道:LinkedIn + Email CTO/創辦人。\n3. **Zee5**(賽事/客戶)— 世界盃印度獨家串流方,開賽夜大規模卡頓被罵上熱搜;**八強 7/9–11 即將開打**,災難救援型切入窗口只剩 1–2 天。管道:Email/LinkedIn 串流技術負責人。\n\n---\n\n## 🅰️ A 級明細(7 天內跟進)\n\n### 1. AIsa\n\n| 欄位 | 內容 |\n|------|------|\n| 類型 | ISV(兼具客戶屬性) |\n| 行業 | AI |\n| 地區 | 全球/亞洲資本背景(Alibaba、住友商事、Saison Capital 投資;新聞同步發於馬尼拉時報) |\n| 訊號摘要 | 2026-07-07 宣布 $6.5M 種子輪,Alibaba 與 Tribe Capital 共同領投;平台為 AI Agent 的「交易網路」,讓 Agent 用量計費採購模型、API、資料與**算力資源**;2–6 月註冊 Agent 成長 150x、API 呼叫量成長 200x,已有 5 萬+ 註冊 Agent |\n| 為何是現在 | 剛拿錢、正在擴 payment infra 並主動 onboard 更多算力/API 供給方;AWS 7/1 剛調漲 GPU Capacity Blocks 價格,第三方算力的價格優勢放大 |\n| 切入角色 | 創辦人/CEO、生態合作(BD)負責人 |\n| 開場話術 | 「恭喜完成 Alibaba 領投的種子輪。我們是亞太 GPU 算力與 CDN 服務商,想把算力/推理 API 上架到 AIsa 的資源網路作為供給方——AWS 上週剛漲價,我們的價格差可以直接變成你們平台的成交量。另外你們 API 量 200x 成長,基礎設施若需要更划算的方案也可以聊。」 |\n| 來源連結 | https://www.globenewswire.com/news-release/2026/07/07/3323663/0/en/aisa-raises-6-5m-co-led-by-alibaba-and-tribe-capital-to-build-the-transaction-network-for-ai-agents.html (另見 Forbes 2026-07-03 報導) |\n\n### 2. Amity Robotics\n\n| 欄位 | 內容 |\n|------|------|\n| 類型 | 客戶 |\n| 行業 | AI |\n| 地區 | 泰國(部署遍及新加坡、香港、馬來西亞、泰國、印尼、UAE、沙烏地 30+ 商業場域) |\n| 訊號摘要 | 2026-07-01 宣布完成 $7M 種子輪(股權部分由 East Ventures 領投、500 Global 跟投),主力產品 ARC Base 為商場用 AI 禮賓機器人/資訊亭,將擴大部署 |\n| 為何是現在 | 種子輪剛到帳 = infra 選型期;AI 禮賓需要**區域內低延遲 LLM 推理 + 雲端集中管理**,部署城市(新、港、馬)與我們節點覆蓋完全重疊 |\n| 切入角色 | CTO / 創辦人 |\n| 開場話術 | 「恭喜完成種子輪。你們的 AI 禮賓部署在新加坡、香港、馬來西亞——正好是我們 GPU 推理節點與 CDN 覆蓋最密的區域。同城推理可以把互動延遲壓到最低,成本比主流雲低一截(AWS 上週還漲了 GPU 價格),願意花 30 分鐘看個對比方案嗎?」 |\n| 來源連結 | https://theaiinsider.tech/2026/07/01/thailands-amity-robotics-closes-usd-7m-seed-round-to-expand-its-physical-ai-concierge-business/ |\n\n---\n\n## 🅱️ B 級(2 週內跟進)\n\n| 公司 | 類型 | 行業 | 地區 | 訊號摘要 | 切入角色 | 來源 |\n|------|------|------|------|----------|----------|------|\n| Zee5 | 客戶 | 賽事 | 印度(非核心地區) | 世界盃印度獨家串流,6/12 開賽夜大規模卡頓/當機/登入失敗;八強 7/9–11 為下一波高峰(訊號日期超過 7 天,但賽事仍進行中,特此註明) | 串流技術負責人 / CTO | https://www.businesstoday.in/sports/football/story/fifa-world-cup-2026-on-zee5-indian-fans-report-buffering-major-outages-while-streaming-on-debut-night-536438-2026-06-12 |\n| Mirendil | 客戶 | AI | 美國(非核心地區) | 前 Anthropic 研究員創辦,7 月首週宣布 $200M 種子輪(a16z+Kleiner Perkins 領投、NVIDIA 參投),做自動化 AI 研發,GPU 需求極大;但地區不符且 NVIDIA 入股自帶算力管道 | CTO / 創辦人 | https://techfundingnews.com/ex-anthropic-researchers-raise-200m-just-weeks-after-quitting-to-build-ai-that-creates-better-ai/ |\n| Altenar | ISV | iGaming | 全球(總部歐洲) | 7/2 獲加拿大 Alberta 供應商批准,該省 7/13 開放監管市場 → 平台正處擴張潮,多區域基建需求上升 | Head of Infrastructure / 技術長 | https://www.yogonet.com/international/news/2026/07/02/125177-altenar-receives-alberta-supplier-approval-ahead-of-regulated-online-gaming-market-launch |\n| Games Valley | ISV | iGaming | 待查(聚合平台) | 7/8 宣布接入 BGaming 內容,聚合平台持續擴張;綁定聚合商 = 帶入整批下游營運商 | 商務/技術負責人 | https://igamingbusiness.com/company-news/games-valley-adds-bgaming-content-in-latest-aggregation-partnership/ |\n\n---\n\n## 👀 觀察中(C 級,僅入庫)\n\n- **Kling AI(快手)** — 7/3 向港交所披露啟動約 $30 億美元融資(百度、阿里雲、騰訊參與);體量過大且自建基建,觀察其生態/下游合作夥伴機會(https://www.scmp.com/tech/article/3359250/kuaishou-files-us3-billion-kling-ai-funding-round-hong-kong-stock-exchange)\n- **Toffee(Banglalink)** — 孟加拉世界盃獨家串流,6 月開賽期間訂閱啟用延遲與轉播中斷投訴;地區非核心(https://www.thedailystar.net/news/tech-startup/news/fans-frustrated-streaming-problems-during-world-cup-openers-4197146)\n- **Groove** — iGaming 聚合商,7/15–16 參加 SBC Summit Tbilisi 主攻東歐/中亞擴張;地區非核心但屬 ISV 型標的(https://g3newswire.com/groove-heads-to-sbc-summit-tbilisi-2026-targeting-eastern-european-and-central-asian-growth/)\n- **LinqAlpha** — 7 月首週披露 $22M A 輪,買方投研 AI Agent;算力需求中等、地區待查(https://gravity.fast/blog/ai-agent-funding-tracker-q3-2026/)\n\n---\n\n## 📊 統計 + 跟進提醒\n\n- 搜尋組數:通用 2 / iGaming 7 / AI 9 / 成人 6 / 賽事 6(共 30 組,每行業均 ≥4)\n- 候選 → 去重/丟棄 → 最終:約 18 → 丟棄 8(BETBY×QTech 4/29、Galatek 2025/12、Disney+×KeSPA 4 月等均超出 7 天窗口;巴西 14 家待審申請無具名公司)→ **A 2 筆、B 4 筆、C 4 筆**\n- 目標達成:A(3–5)❌ 差 1 筆、B(5–8)❌ 差 1 筆\n- 未達標原因(如實回報,未湊數):\n  - **成人行業本日 0 筆**:6 組搜尋僅得產業趨勢與清單型內容,無具名公司之新訊號;背景面(美國 26 州年齡驗證執法、主流平台封州)持續製造遷移需求,建議後續改用 XBIZ 站內搜尋與展會參展名單挖掘。\n  - **近 3 天無具名 DDoS/宕機事件**(僅有「6 月 25% 博彩網站遭 DDoS」的統計研究,無公司名)。\n- 本週可用的通用話術彈藥:**AWS 於 7/1 調漲 EC2 GPU Capacity Blocks 價格**(https://windowsforum.com/threads/aws-ec2-capacity-blocks-price-rise-july-1-2026-what-it-means-for-ai-gpu-costs.432207/)— 對所有 AI 類 Lead 都是成本對比的開場素材。\n\n### ⏰ 舊 A 級跟進提醒(入庫 ≥7 天且 status = new)\n\n首次執行,無歷史 A 級 Lead。\n"}], "verticals": ["AI", "iGaming", "成人", "賽事"]};
+const VCOLOR = {"AI":"var(--v-ai)","iGaming":"var(--v-ig)","成人":"var(--v-ad)","賽事":"var(--v-sp)"};
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $ = id => document.getElementById(id);
+
+$("latestDate").textContent = DATA.latestDate;
+$("generated").textContent = DATA.generated;
+$("counts").innerHTML =
+  `<span class="count sA">今日 A <strong>${DATA.today.A}</strong></span>` +
+  `<span class="count sB">今日 B <strong>${DATA.today.B}</strong></span>` +
+  `<span class="count">今日 C <strong>${DATA.today.C}</strong></span>` +
+  `<span class="count">累積 <strong>${DATA.totals.all}</strong></span>`;
+
+const vdot = v => `<span class="dot" style="background:${VCOLOR[v]||"var(--muted)"}"></span>${esc(v)}`;
+
+const todayA = DATA.leads.filter(l => l.score === "A" && l.date_added === DATA.latestDate);
+$("top3").innerHTML = todayA.length ? todayA.slice(0, 3).map(l => `
+  <div class="card">
+    <h3>${esc(l.company)}</h3>
+    <div class="meta"><span class="pill A">A</span><span>${vdot(l.vertical)}</span><span>${esc(l.type)}</span><span>${esc(l.region)}</span></div>
+    <p>${esc(l.signal)}</p>
+    <p class="why">${esc(l.notes)}</p>
+    <p><a href="${esc(l.source_url)}" target="_blank" rel="noopener">來源 ↗</a></p>
+  </div>`).join("") : `<div class="card" style="border-left-color:var(--c)"><p>今日無 A 級 Lead(依「寧缺勿濫」原則如實回報)。</p></div>`;
+
+if (DATA.dueFollowups.length) {
+  $("dueBox").innerHTML = `<div class="eyebrow">跟進到期提醒</div><div class="due">以下 A 級 Lead 入庫已滿 7 天仍未接觸:<ul>` +
+    DATA.dueFollowups.map(l => `<li><strong>${esc(l.company)}</strong>(${esc(l.date_added)} 入庫)— ${esc(l.signal)}</li>`).join("") + `</ul></div>`;
+}
+
+const state = { score: "", vertical: "", status: "", q: "" };
+const FILTER_GROUPS = [
+  ["score", ["A", "B", "C"]],
+  ["vertical", DATA.verticals],
+  ["status", [...new Set(DATA.leads.map(l => l.status))]],
+];
+$("filters").innerHTML = FILTER_GROUPS.map(([key, vals]) =>
+  vals.map(v => `<button class="chip" data-key="${key}" data-val="${esc(v)}" aria-pressed="false">${esc(v)}</button>`).join("")
+).join("") + `<input type="search" id="q" placeholder="搜尋公司/訊號/地區…" aria-label="搜尋">`;
+
+function renderTable() {
+  const rows = DATA.leads.filter(l =>
+    (!state.score || l.score === state.score) &&
+    (!state.vertical || l.vertical === state.vertical) &&
+    (!state.status || l.status === state.status) &&
+    (!state.q || [l.company, l.signal, l.region, l.notes, l.type].join(" ").toLowerCase().includes(state.q)));
+  $("tbody").innerHTML = rows.map(l => `<tr>
+    <td class="mono nowrap">${esc(l.date_added)}</td>
+    <td><strong>${esc(l.company)}</strong></td>
+    <td class="nowrap">${vdot(l.vertical)}</td>
+    <td class="nowrap">${esc(l.type)}</td>
+    <td>${esc(l.region)}</td>
+    <td class="sig">${esc(l.signal)}</td>
+    <td><span class="pill ${esc(l.score)}">${esc(l.score)}</span></td>
+    <td class="nowrap">${esc(l.status)}</td>
+    <td class="nowrap"><a href="${esc(l.source_url)}" target="_blank" rel="noopener">連結 ↗</a></td>
+    <td>${esc(l.notes)}</td></tr>`).join("");
+  $("empty").hidden = rows.length > 0;
+}
+$("filters").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  const { key, val } = b.dataset;
+  state[key] = state[key] === val ? "" : val;
+  document.querySelectorAll(`.chip[data-key="${key}"]`).forEach(x =>
+    x.setAttribute("aria-pressed", String(state[key] === x.dataset.val)));
+  renderTable();
+});
+$("filters").addEventListener("input", e => {
+  if (e.target.id === "q") { state.q = e.target.value.trim().toLowerCase(); renderTable(); }
+});
+renderTable();
+
+// ---- 迷你 Markdown 渲染(針對日報模板的子集:標題/表格/清單/粗體/連結/分隔線) ----
+function inline(s) {
+  return esc(s)
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/(^|[(\s(]|(?:^|\s)\()(https?:\/\/[^\s()<>]+)/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>')
+    .replace(/`([^`]+)`/g, "<code>$1</code>");
+}
+function renderMd(md) {
+  const lines = md.split(/\r?\n/); const out = []; let list = false, i = 0;
+  const closeList = () => { if (list) { out.push("</ul>"); list = false; } };
+  while (i < lines.length) {
+    const L = lines[i];
+    if (/^\|/.test(L) && /^\|[\s:|-]+\|$/.test(lines[i + 1] || "")) {
+      closeList();
+      const cells = r => r.split("|").slice(1, -1).map(c => c.trim());
+      out.push('<div class="tblwrap"><table><thead><tr>' + cells(L).map(h => `<th>${inline(h)}</th>`).join("") + "</tr></thead><tbody>");
+      i += 2;
+      while (i < lines.length && /^\|/.test(lines[i])) {
+        out.push("<tr>" + cells(lines[i]).map(c => `<td>${inline(c)}</td>`).join("") + "</tr>"); i++;
+      }
+      out.push("</tbody></table></div>"); continue;
+    }
+    const h = L.match(/^(#{1,4})\s+(.*)/);
+    if (h) { closeList(); out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`); }
+    else if (/^---+\s*$/.test(L)) { closeList(); out.push("<hr>"); }
+    else if (/^>\s?/.test(L)) { closeList(); out.push(`<p class="why">${inline(L.replace(/^>\s?/, ""))}</p>`); }
+    else if (/^(?:[-*]|\d+\.)\s+/.test(L)) { if (!list) { out.push("<ul>"); list = true; } out.push(`<li>${inline(L.replace(/^(?:[-*]|\d+\.)\s+/, ""))}</li>`); }
+    else if (L.trim() === "") { closeList(); }
+    else { closeList(); out.push(`<p>${inline(L)}</p>`); }
+    i++;
+  }
+  closeList(); return out.join("\n");
+}
+
+const tabs = $("tabs");
+tabs.innerHTML = DATA.reports.map((r, idx) =>
+  `<button class="chip mono" data-i="${idx}" aria-pressed="${idx === 0}">${r.date}</button>`).join("") || "";
+function showReport(i) {
+  $("report").innerHTML = DATA.reports.length ? renderMd(DATA.reports[i].md) : '<p class="empty">尚無日報</p>';
+  tabs.querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.i === i)));
+}
+tabs.addEventListener("click", e => { const b = e.target.closest(".chip"); if (b) showReport(+b.dataset.i); });
+showReport(0);
+</script>

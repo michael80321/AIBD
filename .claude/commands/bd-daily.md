@@ -1,0 +1,51 @@
+---
+description: 每日 BD Lead 搜尋與日報產出(AI / iGaming / 成人 / 賽事)
+allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Glob, Grep
+---
+
+# /bd-daily — 每日 BD 攻堅名單生成
+
+嚴格依照以下流程執行。全程遵守 CLAUDE.md 的硬性規則:**每個 Lead 必附來源連結、不可捏造、寧缺勿濫**。
+
+## 步驟 1:讀取設定與歷史
+
+1. 讀 `CLAUDE.md`(公司背景、評分標準)。
+2. 讀 `config/icp.md`(各行業買方訊號與打法)。
+3. 讀 `config/search-queries.md`(搜尋模板與媒體清單)。
+4. 讀 `leads/leads.csv` 全部歷史 Lead(去重依據)。
+5. 讀 `config/exclusions.csv`(排除名單)。
+6. 讀最近 1–2 份 `reports/*.md`,避免重複報導同一事件;並找出 7 天前後的舊 A 級 Lead,準備跟進提醒。
+
+## 步驟 2:網路搜尋(核心)
+
+- 對 **AI、iGaming、成人、賽事/體育** 四個行業,**每行業至少執行 4 組搜尋**(從 `config/search-queries.md` 的模板挑選/變化,並將日期佔位符替換為實際近期日期)。
+- **時間限制:只採用近 7 天內的新聞/訊號**(通用最高優先訊號「被 DDoS/宕機」限近 3 天)。
+- 對有潛力的結果,用 WebFetch 讀原文確認細節(公司名、地區、事件時間),不可只憑搜尋摘要下結論。
+- 優先掃 `config/search-queries.md` 列出的行業媒體。
+
+## 步驟 3:評分與去重
+
+對每個候選 Lead:
+
+1. **去重**:公司名(含常見別名)已在 `leads/leads.csv` 或 `config/exclusions.csv` → 跳過;除非有重大新訊號(如新融資、被 DDoS),則可更新並在日報註明「舊 Lead 新訊號」。
+2. **對照 ICP**(`config/icp.md` + CLAUDE.md 公司背景)判斷類型(客戶/合作夥伴/ISV)與評分:
+   - **A**:明確買方訊號 + 符合 ICP(7 天內跟進)
+   - **B**:符合 ICP 但訊號間接(2 週內跟進)
+   - **C**:觀察,只入庫不進日報重點
+3. 來源連結必須是實際搜到、可打開的 URL。**無來源 = 丟棄。**
+
+## 步驟 4:產出
+
+1. 依 `reports/_template.md` 寫 `reports/YYYY-MM-DD.md`(用今天日期):
+   - 今日必打 Top 3
+   - A 級明細(每筆必含:公司、類型、行業、地區、訊號摘要、為何是現在、切入角色、開場話術、來源連結)
+   - B 級表格
+   - 觀察中(C 級)
+   - 統計 + 舊 A 級跟進提醒(7 天前的 A 級且 status 仍為 new)
+2. 將所有新 Lead(含 C 級)**append** 到 `leads/leads.csv`,欄位:
+   `date_added,company,vertical,type,region,signal,score,status,source_url,notes`
+   - status 初始值 `new`;含逗號的欄位用雙引號包住。
+
+## 步驟 5:輸出統計
+
+回報:各行業搜尋組數、候選數、去重丟棄數、最終 A/B/C 筆數、與目標(A 3–5、B 5–8)的差距。若未達標,說明原因(如當日訊號少),**不得湊數**。

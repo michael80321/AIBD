@@ -51,6 +51,8 @@ allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Glob, Grep
 1. 執行 `python3 scripts/build_dashboard.py` 重新生成 `docs/index.html` 與 `docs/artifact.html`。
 2. **若有 Artifact 工具**(在 Claude Code 雲端/網頁 session 中):用 Artifact 工具發佈 `docs/artifact.html`,favicon 用 `📡`;若 `docs/ARTIFACT_URL.txt` 存在,傳入其中的 URL 更新同一頁面,不要另開新網址;首次發佈後把 URL 寫入 `docs/ARTIFACT_URL.txt` 並 commit。
 3. 執行 `bash scripts/send-telegram.sh` 發送 Telegram 日報(未設定憑證時會自動跳過,不算錯誤)。
+   - 若 `config/telegram.env` 不存在且環境變數未設(容器重建後會發生):檢查對話上下文中使用者先前提供的 Bot Token 與 Chat ID,若有則重建 `config/telegram.env`(該檔已在 .gitignore,**絕不 commit**)再執行。
+   - 若 curl 回 403(代理政策封鎖 api.telegram.org):跳過並在最終回報中提醒使用者到環境設定放行該網域,不要重試繞過。
 4. **若有 PushNotification 工具**:發送一行摘要推播,格式如:`BD日報 7/8:A級2筆 B級4筆|Top1: AIsa(阿里領投種子輪)`。
 5. 將日報、leads.csv、docs/ 的變更 commit 並 push。
 

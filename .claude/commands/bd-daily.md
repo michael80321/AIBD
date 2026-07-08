@@ -18,8 +18,11 @@ allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Glob, Grep
 
 ## 步驟 2:網路搜尋(核心)
 
-- 對 **AI、iGaming、成人、賽事/體育** 四個行業,**每行業至少執行 4 組搜尋**(從 `config/search-queries.md` 的模板挑選/變化,並將日期佔位符替換為實際近期日期)。
-- **時間限制:只採用近 7 天內的新聞/訊號**(通用最高優先訊號「被 DDoS/宕機」限近 3 天)。
+- 對 **AI、iGaming、成人、賽事/體育** 四個行業,**每行業至少執行 8 組搜尋**(從 `config/search-queries.md` 的模板挑選/變化,並將日期佔位符替換為實際近期日期;可混用英/中/西語)。
+- **另加至少 4 組「定向挖掘」搜尋**(不依賴新聞事件):展會參展商名單(SiGMA、SBC、G2E Asia、ICE)、行業名錄(白牌平台商、聚合商、成人平台目錄)、融資資料庫頁(Crunchbase、Dealroom、funding tracker)——見 `config/search-queries.md` 定向挖掘章節。
+- **時間窗**:
+  - **A 級訊號**:限近 7 天(「被 DDoS/宕機」限近 3 天)——不放寬。
+  - **B 級訊號**:可放寬至近 14 天;名錄/展會/結構型標的不受時間窗限制,但須符合 ICP 且附名錄來源連結。
 - 對有潛力的結果,用 WebFetch 讀原文確認細節(公司名、地區、事件時間),不可只憑搜尋摘要下結論。
 - 優先掃 `config/search-queries.md` 列出的行業媒體。
 

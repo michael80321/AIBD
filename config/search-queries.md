@@ -65,6 +65,37 @@ game aggregator OR platform provider signs deal
 risk management OR KYC SaaS igaming funding
 ```
 
+## 定向挖掘(不依賴新聞事件,每日至少 4 組)
+
+> 目的:穩定補充 B/C 級儲備池。標的須符合 ICP,來源連結填名錄/參展名單/融資庫頁面。
+
+### 展會參展商名單(iGaming / 成人 / 賽事)
+```
+SiGMA Asia 2026 exhibitors list platform providers
+SBC Summit 2026 exhibitor list sportsbook
+G2E Asia 2026 exhibitors igaming suppliers
+ICE Barcelona 2026 exhibitors white label
+XBIZ show exhibitors list adult platform
+```
+
+### 行業名錄 / 供應商清單
+```
+white label casino platform providers list 2026
+igaming aggregator OR game aggregation platform list
+top sportsbook software providers Asia
+adult tube OR cam site technology providers list
+esports tournament platform companies list
+live streaming platform companies Southeast Asia list
+```
+
+### 融資資料庫 / Tracker
+```
+site:crunchbase.com AI startup Singapore OR Taiwan OR "Hong Kong" funding 2026
+AI startup funding tracker weekly update
+dealroom OR dealstreetasia AI OR gaming funding Southeast Asia
+igaming OR gambling tech funding rounds 2026
+```
+
 ## 行業媒體清單(優先掃這些站)
 
 ### iGaming

@@ -21,3 +21,18 @@ date_added,company,vertical,type,region,signal,score,status,source_url,notes
 2026-07-08,Fanvue,成人,客戶,英國/全球,"結構型:成長中的創作者訂閱平台,對 AI 創作者友善",C,new,https://blog.rm11.com/best-platforms-content-creators-2026/,"與我方成人 AI 產品線契合,待找具體訊號升級"
 2026-07-08,beIN SPORTS APAC,賽事,客戶,新加坡(11 個亞太市場),"結構型:亞太體育內容商,beIN SPORTS CONNECT 串流覆蓋 11 國",C,new,https://www.dacast.com/blog/ott-sports-streaming/,新加坡=核心地區;大型標的先觀察
 2026-07-08,VPlayed,賽事,ISV,印度/全球,"結構型:OTT 串流平台方案商(4K 轉碼/ABR)",C,new,https://www.dacast.com/blog/ott-sports-streaming/,方案商綁定型,先觀察
+2026-07-09,CHZZK(Naver),賽事,客戶,韓國,"7/3 宣布獨家直播 EWC 2026 全部 25 項賽事(7/6-8/23);已獨播世界盃 104 場、簽 LCK 2026-2030,週使用時數超越 SOOP",B,new,https://en.sedaily.com/technology/2026/07/03/navers-chzzk-to-livestream-all-events-of-esports-world-cup,"地區非核心+Naver 自有雲,故 B;切入=邊緣分發/擴容"
+2026-07-09,TwelveLabs,AI,客戶,美國/韓國,"7/1 完成 $100M Series B(NEA+NAVER Ventures 領投、Amazon 參投),影片理解 AI,GPU 推理重",B,new,https://www.bloomberg.com/news/articles/2026-07-01/video-search-startup-raises-100-million-from-amazon-vc-funds,地區非核心故 B;剛融資=infra 選型期
+2026-07-09,Spotv,賽事,客戶,香港/新加坡/馬來西亞/菲律賓,"結構型:韓系體育串流平台於港星馬菲營運(MotoGP/BWF/KBO 等版權)",B,new,https://www.imdb.com/news/ni63562210,核心地區串流平台;低延遲+成本對比切入
+2026-07-09,Premier League(新加坡自營串流),賽事,客戶,新加坡,"結構型:英超於新加坡推自營 D2C 串流服務,SCMP 指香港可能跟進",B,new,https://www.scmp.com/sport/football/article/3344797/premier-league-branch-out-new-singapore-streaming-service-could-hong-kong-follow,自營分發=區域 CDN 採購需求
+2026-07-09,96ace,iGaming,合作夥伴,亞洲(馬來西亞/新加坡),"結構型:亞洲老牌 casino 聯盟行銷計畫(rev-share 至 40%),掌握大量亞洲流量主",B,new,https://www.pushground.com/blog/igaming-asia,廣告聯盟=轉介型夥伴
+2026-07-09,Visualize Group,iGaming,合作夥伴,全球,"7/2 宣布收購檢測認證機構 eCOGRA,認證機構接觸所有申牌/上線平台",B,new,https://www.yogonet.com/international/news/2026/07/02/125175-visualize-group-to-acquire-gaming-compliance-and-certification-provider-ecogra,轉介潛力型夥伴
+2026-07-09,Momentum Group(×Fanatics),iGaming,客戶,UAE,"6/30 與 Fanatics 合資新實體並轉移彩票/體育博彩/iGaming 牌照 → 新平台建設期",B,new,https://asgam.com/2026/06/30/uaes-momentum-group-to-transfer-lottery-sports-betting-and-igaming-licenses-to-new-entity-under-partnership-with-fanatics-gaming/,地區非核心;14 天 B 窗內大案值
+2026-07-09,Talp,AI,客戶,待查,"7/2 完成 $20M pre-seed(Formus Capital 領投、a16z Scout 參投),AI 人格模擬測試",C,new,https://www.crescendo.ai/news/latest-vc-investment-deals-in-ai-startups,推理需求中等;地區待查
+2026-07-09,Together AI,AI,客戶,美國,"7/1 完成 $800M C 輪(Aramco Ventures 領投),開源模型推理雲",C,new,https://www.crescendo.ai/news/latest-vc-investment-deals-in-ai-startups,同業 GPU 雲;觀察亞太供給缺口/轉售合作
+2026-07-09,CBS Global(Crypto Bet Sports),iGaming,客戶,待查,"新加密賭場+sportsbook 上線(SoftGamings 白牌、庫拉索牌照)",C,new,https://igamingfuture.com/cbs-global-introduces-crypto-casino-and-sportsbook-crypto-bet-sports/,發布日期未標註,待確認新鮮度
+2026-07-09,Odds96,iGaming,合作夥伴,南亞,"結構型:南亞流量聯盟計畫",C,new,https://richads.com/blog/best-igaming-affiliate-programs/,地區非核心
+2026-07-09,GR8 Tech,iGaming,ISV,全球,"結構型:sportsbook 平台商,活躍於巴西等新興市場",C,new,https://gr8.tech/blog/brazil-betting/,ISV 綁定型觀察
+2026-07-09,GamingTec,iGaming,ISV,全球,"結構型:白牌賭場+sportsbook 平台商",C,new,https://gamingtec.com/gt-white-label,ISV 綁定型觀察
+2026-07-09,Dacast,賽事,ISV,全球,"結構型:OTT 串流方案商,客戶多為體育/活動串流",C,new,https://www.dacast.com/blog/ott-sports-streaming/,方案商綁定型觀察
+2026-07-09,iGBA(iGB Affiliate),iGaming,合作夥伴,全球,"結構型:聯盟行銷展會與全球名錄主辦方",C,new,https://www.igbaffiliate.com/en/directory/,批量觸達流量主的管道

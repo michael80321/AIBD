@@ -36,3 +36,19 @@ date_added,company,vertical,type,region,signal,score,status,source_url,notes
 2026-07-09,GamingTec,iGaming,ISV,全球,"結構型:白牌賭場+sportsbook 平台商",C,new,https://gamingtec.com/gt-white-label,ISV 綁定型觀察
 2026-07-09,Dacast,賽事,ISV,全球,"結構型:OTT 串流方案商,客戶多為體育/活動串流",C,new,https://www.dacast.com/blog/ott-sports-streaming/,方案商綁定型觀察
 2026-07-09,iGBA(iGB Affiliate),iGaming,合作夥伴,全球,"結構型:聯盟行銷展會與全球名錄主辦方",C,new,https://www.igbaffiliate.com/en/directory/,批量觸達流量主的管道
+2026-07-10,Even Realities,AI,客戶,中國(深圳),"7/6 完成 $150M pre-Series B(美團+騰訊領投,估值 $1B),AI 智慧眼鏡,資金用於強化 AI 與國際擴張",A,new,https://techcrunch.com/2026/07/06/smart-glasses-maker-even-realities-hits-1b-valuation-with-150m-funding-led-by-meituan-tencent/,"核心地區+剛融資;切入=海外低延遲推理節點+成本對比"
+2026-07-10,Talkie(MiniMax),AI×成人,客戶,中國(上海),"出海 AI 伴侶頭部 App(海外版含擦邊內容);中國新規 7/15 生效,出海成唯一成長線",B,new,https://www.scmp.com/tech/big-tech/article/3328023/chinas-kuaishou-lures-overseas-users-nsfw-ai-companions,"核心地區+成人 AI 契合;低調接觸海外業務/infra"
+2026-07-10,Symphony Tech(快手 FantaSay),AI×成人,客戶,新加坡,"快手新加坡子公司營運 NSFW 向 AI 伴侶 FantaSay(2025/9 上線、50 萬下載;非新訊號,7/15 新規催化,已註明)",B,new,https://www.scmp.com/tech/big-tech/article/3328023/chinas-kuaishou-lures-overseas-users-nsfw-ai-companions,結構型;新加坡實體=核心地區
+2026-07-10,PolyBuzz,AI×成人,客戶,中國(北京),"出海 AI 伴侶 App,7/15 新規催化;中小規模=客單契合",B,new,https://www.scmp.com/tech/big-tech/article/3328023/chinas-kuaishou-lures-overseas-users-nsfw-ai-companions,出海 AI 伴侶賽道
+2026-07-10,Venice,AI,客戶,美國,"7 月首週完成 $65M Series A(Dragonfly 領投,估值 $1B),私密無審查 AI 模型平台",B,new,https://www.crescendo.ai/news/latest-vc-investment-deals-in-ai-startups,地區非核心;無審查定位與我方互補
+2026-07-10,KICK,賽事,客戶,全球(Stake 系),"6/27 成為 Riot 官方轉播夥伴(MSI 2026 起 LoL/Valorant/TFT),串流量暴增期",B,new,https://www.riotgames.com/en/news/riot-kick-watch-costreaming,博彩關聯背景與我方接受度契合
+2026-07-10,DigiPlus,iGaming,客戶,菲律賓,"菲 eGames 龍頭:HK$16 億認購 IEC 可轉股至 53.89% 控制權、攜 TGXI 整合線上平台(6 月訊號,14 天窗邊緣已註明)",B,new,https://agbrief.com/news/philippines/10/06/2026/international-entertainment-to-enter-philippine-online-gaming-via-digiplus-subsidiary-tgxi/,亞太龍頭擴張期
+2026-07-10,IEC(國際娛樂),iGaming,客戶,香港/菲律賓,"透過 DigiPlus 子公司 TGXI 進入菲線上博彩,新平台整合建設期(待 PAGCOR 批准)",B,new,https://agbrief.com/news/philippines/10/06/2026/international-entertainment-to-enter-philippine-online-gaming-via-digiplus-subsidiary-tgxi/,香港上市=核心地區
+2026-07-10,Candy AI,AI×成人,客戶,全球,"結構型:頭部 NSFW AI 伴侶平台(圖像+對話),重推理用量、主流雲政策風險高",B,new,https://jovo.tech/ai/best-ai-companions-in-2026-top-unfiltered-nsfw-ai-chat-apps/,"賣點=接受此行業+不會突然封你"
+2026-07-10,Janitor AI,AI×成人,客戶,全球,"結構型:巨量流量 NSFW 角色扮演平台(可外接模型),推理代管/GPU 需求大",B,new,https://www.scrile.com/blog/free-uncensored-ai-chat,同上
+2026-07-10,HiWaifu,AI×成人,客戶,中國(重慶),"出海 AI 伴侶 App,規模較小",C,new,https://www.scmp.com/tech/big-tech/article/3328023/chinas-kuaishou-lures-overseas-users-nsfw-ai-companions,先觀察
+2026-07-10,SpicyChat,AI×成人,客戶,全球,"結構型:NSFW AI 聊天平台",C,new,https://www.scrile.com/blog/free-uncensored-ai-chat,觀察
+2026-07-10,Soulkyn,AI×成人,客戶,全球,"結構型:AI 伴侶平台(含圖像生成)",C,new,https://jovo.tech/ai/best-ai-companions-in-2026-top-unfiltered-nsfw-ai-chat-apps/,觀察
+2026-07-10,DAZN,賽事,客戶,全球,"7/8 宣布連續第三年免費全球轉播 EWC(7/6-8/23)",C,new,https://www.broadbandtvnews.com/2026/07/08/dazn-renews-free-global-coverage-of-esports-world-cup/,體量大、自有分發成熟
+2026-07-10,Blask,iGaming,ISV,全球,"7/8 推出模組化訂閱的 iGaming 市場分析 SaaS",C,new,https://g3newswire.com/blask-introduces-modular-pricing-for-igaming-analytics/,ISV 觀察
+2026-07-10,Gataca,iGaming,合作夥伴,全球,"iGaming 身分驗證/合規方案商(7/8 yogonet 專文)",C,new,https://www.yogonet.com/international/nyce/news/2026/07/08/125281-strengthening-igaming-identity-infrastructure-through-verifiable-credentials-and-realtime-risk-intelligence,夥伴型觀察

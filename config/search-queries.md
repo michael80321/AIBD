@@ -88,6 +88,18 @@ esports tournament platform companies list
 live streaming platform companies Southeast Asia list
 ```
 
+### 短劇出海 / 中國 AI 出海(中文為主,每日至少 2 組)
+
+> 短劇平台 CDN/頻寬佔非內容支出 30–50%、對價格敏感;中國 AI 公司出海=海外 GPU/節點需求。中文搜尋命中率高。
+
+```
+短劇 出海 平台 融資 OR 擴張 {月份}
+短剧 出海 CDN OR 带宽 成本
+中國 AI 公司 出海 融資 {月份}
+AI 伴侶 OR 陪伴 App 出海 新加坡 OR 香港
+中國 遊戲 出海 發行 東南亞 {月份}
+```
+
 ### 融資資料庫 / Tracker
 ```
 site:crunchbase.com AI startup Singapore OR Taiwan OR "Hong Kong" funding 2026

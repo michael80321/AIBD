@@ -69,7 +69,15 @@ date_added,company,vertical,type,region,signal,score,status,source_url,notes
 2026-07-12,中文在線,AI×串流,客戶,中國(北京),"短劇出海布局:向港交所遞表擬發 H 股支撐全球市場;短劇=頻寬大戶",B,new,https://www.cbndata.com/information/294947,CDN/頻寬佔短劇非內容支出 30-50%
 2026-07-12,ReelShort(楓葉互動),串流,客戶,美國/中國,"結構型:短劇出海雙巨頭之一,下載量多次超越 Netflix,全球分發擴張",B,new,https://adfox.ai/blog/zh/short-drama-platforms/,價格敏感=我方價格優勢直擊
 2026-07-12,DramaBox(點眾科技),串流,客戶,中國(北京),"結構型:短劇出海雙巨頭之一,獲迪士尼加速器投資;多市場分發",B,new,https://www.cbndata.com/information/294947,同上
-2026-07-12,DeepSeek,AI,客戶,中國(杭州),"7/3 報導籌備首次外部融資 $7B(估值上看 $59B)",C,new,https://n.yam.com/Article/20260703156129,體量大、以國內算力為主;觀察海外推理布局
+2026-07-12,DeepSeek,AI,客戶,中國(杭州),"7/3 報導籌備 $7B 融資;7/14 明報:最新一輪已完成,創辦人身家達 $360 億(舊 Lead 新訊號)",C,new,https://n.yam.com/Article/20260703156129,體量大、以國內算力為主;觀察海外推理布局
 2026-07-12,擎天租,AI,客戶,中國,"中國首家機器人租賃獨角獸(估值 ¥70 億)",C,new,https://hkej.com/instantnews/china/article/4409626/,租賃模式=機器人雲端管理需求,觀察
 2026-07-12,Norm AI,AI,客戶,美國,"7/7 完成 $120M Series C,合規 AI",C,new,https://techstartups.com/2026/07/08/venture-capital-startup-funding-roundup-july-8-2026/,地區非核心觀察
 2026-07-12,Visionular,賽事,合作夥伴,美國/全球,"影音編碼 AI 方案商,深耕短劇/串流客群",C,new,https://visionular.ai/short-drama-the-new-content-category-disrupting-global-entertainment/,客戶重疊的潛在轉介夥伴
+2026-07-15,IGG Group,遊戲出海,客戶,新加坡/香港,"結構型:老牌出海發行商,分支遍及泰/菲/印尼/UAE,服務 200+ 國家用戶",B,new,https://mtz.china.com/touzi/2025/1210/207202.html,核心地區;全球加速/節點穩定需求
+2026-07-15,點點互動(Century Games),遊戲出海,客戶,中國,"結構型:中國廠商出海收入榜首級(Whiteout Survival 累計破百億),四大洲八國佈局",B,new,https://hk.investing.com/news/stock-market-news/article-475765,頻寬/加速大戶
+2026-07-15,中手游(GamePartner.AI),遊戲出海×AI,ISV,中國,"5/9 與杭州機憶 AI 推出 GamePartner.AI(AI+全球發行一體平台);結構型已註明日期",B,new,https://finance.sina.com.cn/jjxw/2026-05-09/doc-inhxhkfp3556456.shtml,綁定=帶入休閒遊戲開發者客群
+2026-07-15,1xBet,iGaming,客戶,全球(亞洲活躍),"7/13 IAG 專文其全球監管策略;亞洲灰市活躍大戶,與我方接受博彩定位契合",B,new,https://asgam.com/2026/07/13/from-regulation-to-responsibility-the-1xbet-global-strategy/,自建成熟故 B 觀察接觸
+2026-07-15,BetMGM,iGaming,客戶,美國,"7/14 DownDetector 用戶回報大量宕機(原因未明)",C,new,https://community.designtaxi.com/topic/33104-is-betmgm-down-july-14-2026/,非核心巨頭僅觀察
+2026-07-15,Tonybet,iGaming,客戶,歐洲/加拿大,"7/13-14 取得 Alberta iGaming 牌照,中型營運商擴張",C,new,https://g3newswire.com/tonybet-secures-alberta-igaming-license-as-regulated-market-opens/,地區非核心
+2026-07-15,Koom Games,iGaming,ISV,待查,"7/14 新遊戲工作室透過 Tequity RGS 平台出內容",C,new,https://g3newswire.com/tequity-agrees-rgs-deal-to-power-delivery-for-ambitious-new-studio-koom-games/,小型 ISV 觀察
+2026-07-15,快出海(kchuhai),遊戲出海,合作夥伴,中國,"中國出海服務對接平台(含東南亞遊戲出海需求版)",C,new,https://www.kchuhai.com/tags/youxichuhai,管道型夥伴觀察

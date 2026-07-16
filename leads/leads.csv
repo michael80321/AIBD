@@ -39,7 +39,7 @@ date_added,company,vertical,type,region,signal,score,status,source_url,notes
 2026-07-10,Even Realities,AI,客戶,中國(深圳),"7/6 完成 $150M pre-Series B(美團+騰訊領投,估值 $1B),AI 智慧眼鏡,資金用於強化 AI 與國際擴張",A,new,https://techcrunch.com/2026/07/06/smart-glasses-maker-even-realities-hits-1b-valuation-with-150m-funding-led-by-meituan-tencent/,"核心地區+剛融資;切入=海外低延遲推理節點+成本對比"
 2026-07-10,Talkie(MiniMax),AI×成人,客戶,中國(上海),"出海 AI 伴侶頭部 App(海外版含擦邊內容);中國新規 7/15 生效,出海成唯一成長線",B,new,https://www.scmp.com/tech/big-tech/article/3328023/chinas-kuaishou-lures-overseas-users-nsfw-ai-companions,"核心地區+成人 AI 契合;低調接觸海外業務/infra"
 2026-07-10,Symphony Tech(快手 FantaSay),AI×成人,客戶,新加坡,"快手新加坡子公司營運 NSFW 向 AI 伴侶 FantaSay(2025/9 上線、50 萬下載;非新訊號,7/15 新規催化,已註明)",B,new,https://www.scmp.com/tech/big-tech/article/3328023/chinas-kuaishou-lures-overseas-users-nsfw-ai-companions,結構型;新加坡實體=核心地區
-2026-07-10,PolyBuzz,AI×成人,客戶,中國(北京),"出海 AI 伴侶 App,7/15 新規催化;中小規模=客單契合",B,new,https://www.scmp.com/tech/big-tech/article/3328023/chinas-kuaishou-lures-overseas-users-nsfw-ai-companions,出海 AI 伴侶賽道
+2026-07-10,PolyBuzz,AI×成人,客戶,中國(北京),"出海 AI 伴侶 App;7/15 新規生效當日中媒點名為出海黑馬(2000 萬 AI 角色),國內關停流量湧入(7/16 升級 B→A)",A,new,https://www.scmp.com/tech/big-tech/article/3328023/chinas-kuaishou-lures-overseas-users-nsfw-ai-companions,出海 AI 伴侶賽道
 2026-07-10,Venice,AI,客戶,美國,"7 月首週完成 $65M Series A(Dragonfly 領投,估值 $1B),私密無審查 AI 模型平台",B,new,https://www.crescendo.ai/news/latest-vc-investment-deals-in-ai-startups,地區非核心;無審查定位與我方互補
 2026-07-10,KICK,賽事,客戶,全球(Stake 系),"6/27 成為 Riot 官方轉播夥伴(MSI 2026 起 LoL/Valorant/TFT),串流量暴增期",B,new,https://www.riotgames.com/en/news/riot-kick-watch-costreaming,博彩關聯背景與我方接受度契合
 2026-07-10,DigiPlus,iGaming,客戶,菲律賓,"菲 eGames 龍頭:HK$16 億認購 IEC 可轉股至 53.89% 控制權、攜 TGXI 整合線上平台(6 月訊號,14 天窗邊緣已註明)",B,new,https://agbrief.com/news/philippines/10/06/2026/international-entertainment-to-enter-philippine-online-gaming-via-digiplus-subsidiary-tgxi/,亞太龍頭擴張期
@@ -81,3 +81,14 @@ date_added,company,vertical,type,region,signal,score,status,source_url,notes
 2026-07-15,Tonybet,iGaming,客戶,歐洲/加拿大,"7/13-14 取得 Alberta iGaming 牌照,中型營運商擴張",C,new,https://g3newswire.com/tonybet-secures-alberta-igaming-license-as-regulated-market-opens/,地區非核心
 2026-07-15,Koom Games,iGaming,ISV,待查,"7/14 新遊戲工作室透過 Tequity RGS 平台出內容",C,new,https://g3newswire.com/tequity-agrees-rgs-deal-to-power-delivery-for-ambitious-new-studio-koom-games/,小型 ISV 觀察
 2026-07-15,快出海(kchuhai),遊戲出海,合作夥伴,中國,"中國出海服務對接平台(含東南亞遊戲出海需求版)",C,new,https://www.kchuhai.com/tags/youxichuhai,管道型夥伴觀察
+2026-07-16,Amity Solutions(企業 AI),AI,客戶,新加坡,"7 月上旬:完成 $100M Series D 後在新加坡開設區域總部+AI 研究中心",A,new,https://fintechnews.sg/133840/ai/amity-enterprise-ai-singapore-hq/,"核心地區+新據點基建選型中;與 Amity Robotics 為不同公司"
+2026-07-16,PhilWeb,iGaming,客戶+ISV,菲律賓,"7/9 獨家簽 Pragmatic Play,Q3 內以自建託管基建+API 向全菲持牌營運商分發",B,new,https://agbrief.com/news/philippines/09/07/2026/philweb-secures-exclusive-pragmatic-play-gaming-services-partnership/,基建擴容在即;上市公司
+2026-07-16,Video Rebirth,AI,客戶,新加坡+香港,"騰訊前 AI 負責人創辦 world model 公司,已募 $80M,7 月正募新一輪",B,new,https://www.forbes.com/sites/zinnialee/2026/06/24/singapore-video-startup-founded-by-tencents-former-ai-head-bets-big-on-world-models/,核心地區;影片世界模型=GPU 重度戶
+2026-07-16,九州文化,串流(短劇),客戶,中國(深圳),"結構型:深圳短劇出海頭部(深發改委點名),多平台全球分發",B,new,https://fgw.sz.gov.cn/ztzl/qtztzl/szscjmyjjfzzhfwpt/hwtz/sjal/content/post_12657567.html,短劇出海=頻寬大戶
+2026-07-16,山海(Shanhai),串流(短劇),客戶,中國(深圳),"結構型:深圳短劇出海頭部企業之一",B,new,https://fgw.sz.gov.cn/ztzl/qtztzl/szscjmyjjfzzhfwpt/hwtz/sjal/content/post_12657567.html,同上
+2026-07-16,Unifi TV(馬來西亞電信),賽事,客戶,馬來西亞,"世界盃官方轉播方之一(日票模式);決賽 7/19 流量高峰倒數;Astro 退出後承接全國需求",B,new,https://www.malaymail.com/news/malaysia/2026/06/07/how-malaysians-can-watch-the-fifa-world-cup-2026-a-complete-guide/221841,核心地區;決賽保障快打窗口 3 天
+2026-07-16,無限進制,串流(短劇),客戶,中國(深圳),"深圳短劇出海企業(深發改委點名)",C,new,https://fgw.sz.gov.cn/ztzl/qtztzl/szscjmyjjfzzhfwpt/hwtz/sjal/content/post_12657567.html,觀察
+2026-07-16,雷霆信息,串流(短劇),客戶,中國(深圳),"深圳短劇出海企業(深發改委點名)",C,new,https://fgw.sz.gov.cn/ztzl/qtztzl/szscjmyjjfzzhfwpt/hwtz/sjal/content/post_12657567.html,觀察
+2026-07-16,時刻互動,串流(短劇),客戶,中國(江西),"6 月獲全國首筆短劇貸 ¥1000 萬(工行/贛江新區)",C,new,https://finance.sina.com.cn/jjxw/2026-07-10/doc-inihinfw3870927.shtml,短劇製作方資金活水訊號
+2026-07-16,Merkur Group,iGaming,ISV,歐洲,"收購 White Hat Studios(遊戲內容工作室)",C,new,https://g3newswire.com/merkur-group-has-bought-white-hat-studios/,歐美體系觀察
+2026-07-16,InstaLILY AI,AI,客戶,美國,"7/15 完成 $60M Series B(Energize Capital 領投)",C,new,https://www.alleywatch.com/2026/07/the-alleywatch-startup-daily-funding-report-7-15-2026/,地區非核心觀察

@@ -51,9 +51,13 @@ def build(leads, reports):
     due_cutoff = (datetime.strptime(latest_date, "%Y-%m-%d") - timedelta(days=7)).strftime("%Y-%m-%d")
     due = [r for r in leads if r.get("score") == "A" and r.get("status") == "new" and r.get("date_added", "9999") <= due_cutoff]
 
+    playbook_path = ROOT / "config" / "playbook.md"
+    playbook = playbook_path.read_text(encoding="utf-8") if playbook_path.exists() else ""
+
     data = {
         "generated": now.strftime("%Y-%m-%d %H:%M"),
         "latestDate": latest_date,
+        "playbook": playbook,
         "today": {"A": count(today_rows, "A"), "B": count(today_rows, "B"), "C": count(today_rows, "C")},
         "totals": {"all": len(leads), "A": count(leads, "A"), "B": count(leads, "B"), "C": count(leads, "C")},
         "dueFollowups": due,
@@ -105,7 +109,10 @@ header.top{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 18px;border
 .count strong{font-size:17px;color:var(--ink);font-family:ui-monospace,Consolas,monospace;font-variant-numeric:tabular-nums}
 .count.sA strong{color:var(--a)} .count.sB strong{color:var(--b)}
 
-.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:34px 0 10px;display:flex;align-items:center;gap:10px}
+.topnav{position:sticky;top:0;z-index:20;display:flex;gap:4px;flex-wrap:wrap;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--line)}
+.topnav a{padding:5px 14px;border-radius:999px;font-size:13.5px;color:var(--muted);border:1px solid transparent}
+.topnav a:hover{color:var(--accent);border-color:var(--line);text-decoration:none}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:34px 0 10px;display:flex;align-items:center;gap:10px;scroll-margin-top:56px}
 .eyebrow::after{content:"";flex:1;border-top:1px solid var(--line)}
 
 .top3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
@@ -153,23 +160,48 @@ footer{margin-top:40px;font-size:12.5px;color:var(--muted);display:flex;gap:14px
 
 <div class="wrap">
 <header class="top">
-  <h1>BD 攻堅日報</h1>
+  <h1>BD 攻堅工作台</h1>
   <span class="date mono" id="latestDate"></span>
   <div class="counts" id="counts"></div>
 </header>
 
-<div class="eyebrow">今日必打(A 級)</div>
+<nav class="topnav">
+  <a href="#sec-today">今日行動</a>
+  <a href="#sec-pipeline">Pipeline</a>
+  <a href="#sec-db">資料庫</a>
+  <a href="#sec-history">歷史</a>
+  <a href="#sec-playbook">攻堅手冊</a>
+  <a href="#sec-reports">日報</a>
+</nav>
+
+<div class="eyebrow" id="sec-today">今日必打(A 級)</div>
 <div class="top3" id="top3"></div>
 <div id="dueBox"></div>
 
-<div class="eyebrow">Lead 資料庫</div>
+<div class="eyebrow" id="sec-pipeline">Pipeline 狀態</div>
+<div class="filters" id="statusChips"></div>
+<div class="tablewrap"><table class="leads" style="min-width:820px">
+  <thead><tr><th>公司</th><th>評分</th><th>城市/地區</th><th>方案</th><th>入庫</th><th>已過天數</th><th>狀態</th></tr></thead>
+  <tbody id="overdueBody"></tbody>
+</table></div>
+
+<div class="eyebrow" id="sec-db">Lead 資料庫</div>
 <div class="filters" id="filters"></div>
 <div class="tablewrap"><table class="leads">
   <thead><tr><th>日期</th><th>公司</th><th>行業</th><th>類型</th><th>城市</th><th>地區</th><th>訊號</th><th>方案</th><th>評分</th><th>狀態</th><th>來源</th><th>備註</th></tr></thead>
   <tbody id="tbody"></tbody>
 </table><div class="empty" id="empty" hidden>沒有符合篩選的 Lead</div></div>
 
-<div class="eyebrow">日報全文</div>
+<div class="eyebrow" id="sec-history">歷史紀錄(每日產出)</div>
+<div class="tablewrap"><table class="leads" style="min-width:520px">
+  <thead><tr><th>日期</th><th>A</th><th>B</th><th>C</th><th>當日合計</th><th>累積</th></tr></thead>
+  <tbody id="historyBody"></tbody>
+</table></div>
+
+<div class="eyebrow" id="sec-playbook">攻堅手冊(開發技巧 + 窗口怎麼找)</div>
+<article class="report" id="playbook"></article>
+
+<div class="eyebrow" id="sec-reports">日報全文</div>
 <div class="tabs" id="tabs"></div>
 <article class="report" id="report"></article>
 
@@ -211,6 +243,42 @@ if (DATA.dueFollowups.length) {
   $("dueBox").innerHTML = `<div class="eyebrow">跟進到期提醒</div><div class="due">以下 A 級 Lead 入庫已滿 7 天仍未接觸:<ul>` +
     DATA.dueFollowups.map(l => `<li><strong>${esc(l.company)}</strong>(${esc(l.date_added)} 入庫)— ${esc(l.signal)}</li>`).join("") + `</ul></div>`;
 }
+
+// ---- Pipeline 狀態 + 逾期追蹤 ----
+const STATUS_LABEL = {new:"未接觸", contacted:"已接觸", replied:"有回覆", meeting:"已約談", won:"成交", lost:"失單", cold:"冷凍", dropped:"放棄"};
+const dayDiff = d => Math.floor((new Date(DATA.latestDate) - new Date(d)) / 86400000);
+const statusCounts = {};
+DATA.leads.forEach(l => { statusCounts[l.status] = (statusCounts[l.status] || 0) + 1; });
+$("statusChips").innerHTML = Object.entries(statusCounts).map(([s, n]) =>
+  `<span class="count">${esc(STATUS_LABEL[s] || s)} <strong>${n}</strong></span>`).join("") +
+  `<span class="count sA">A 級逾期(>7天未接觸) <strong>${DATA.leads.filter(l => l.score === "A" && l.status === "new" && dayDiff(l.date_added) >= 7).length}</strong></span>`;
+
+const attention = DATA.leads
+  .filter(l => l.status === "new" && (l.score === "A" || l.score === "B"))
+  .map(l => ({...l, age: dayDiff(l.date_added), limit: l.score === "A" ? 7 : 14}))
+  .filter(l => l.age >= l.limit - 1)
+  .sort((a, b) => (b.age - b.limit) - (a.age - a.limit));
+$("overdueBody").innerHTML = attention.map(l => `<tr>
+  <td><strong>${esc(l.company)}</strong></td>
+  <td><span class="pill ${esc(l.score)}">${esc(l.score)}</span></td>
+  <td class="nowrap">${esc(l.city || l.region)}</td>
+  <td class="sols">${(l.solutions || "").split(";").filter(Boolean).map(x => `<span class="soltag">${esc(x)}</span>`).join("")}</td>
+  <td class="mono nowrap">${esc(l.date_added)}</td>
+  <td class="mono nowrap" style="color:${l.age >= l.limit ? "var(--a)" : "var(--b)"}">${l.age} 天${l.age >= l.limit ? "(逾期)" : ""}</td>
+  <td class="nowrap">${esc(STATUS_LABEL[l.status] || l.status)}</td></tr>`).join("") ||
+  '<tr><td colspan="7" class="empty">沒有待追蹤的 A/B 級 Lead 🎉</td></tr>';
+
+// ---- 歷史紀錄 ----
+const byDate = {};
+DATA.leads.forEach(l => {
+  const d = l.date_added; byDate[d] = byDate[d] || {A:0, B:0, C:0};
+  byDate[d][l.score] = (byDate[d][l.score] || 0) + 1;
+});
+let cum = 0;
+$("historyBody").innerHTML = Object.keys(byDate).sort().map(d => {
+  const c = byDate[d]; const day = (c.A||0)+(c.B||0)+(c.C||0); cum += day;
+  return `<tr><td class="mono nowrap">${esc(d)}</td><td class="mono">${c.A||0}</td><td class="mono">${c.B||0}</td><td class="mono">${c.C||0}</td><td class="mono">${day}</td><td class="mono">${cum}</td></tr>`;
+}).join("");
 
 const state = { score: "", vertical: "", status: "", city: "", sol: "", q: "" };
 const CITY_LIST = [...new Set(DATA.leads.map(l => (l.city || "").split("?")[0]).filter(Boolean))];
@@ -307,6 +375,7 @@ function showReport(i) {
 }
 tabs.addEventListener("click", e => { const b = e.target.closest(".chip"); if (b) showReport(+b.dataset.i); });
 showReport(0);
+$("playbook").innerHTML = renderMd(DATA.playbook || "*尚未建立手冊(config/playbook.md)*");
 </script>
 """
     body = body.replace("__DATA__", payload)

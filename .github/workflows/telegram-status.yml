@@ -1,0 +1,36 @@
+name: Telegram 狀態同步
+
+on:
+  schedule:
+    - cron: "15 * * * *"   # 每小時
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/bd-daily-lead-system-lwbumo
+
+      - name: 讀取 TG 訊息並更新狀態
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 scripts/tg_status_sync.py
+
+      - name: 重建儀表板並提交
+        run: |
+          set -e
+          if git diff --quiet; then
+            echo "無變更"; exit 0
+          fi
+          python3 scripts/build_dashboard.py
+          git config user.name "bd-bot"
+          git config user.email "bd-bot@users.noreply.github.com"
+          git add -A
+          git commit -m "TG 狀態同步:更新 Pipeline"
+          git push

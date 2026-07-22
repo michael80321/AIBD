@@ -42,13 +42,18 @@ allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Glob, Grep
 
 1. 依 `reports/_template.md` 寫 `reports/YYYY-MM-DD.md`(用今天日期):
    - **今日 5 件事**(行動清單置頂):2–3 件跟進到期 + 2–3 件新開發,每件一行寫明「找誰(公司/角色)、談什麼方案(依 solutions)、用什麼管道」;若有同城多家可打包,註明城市。
-   - A 級明細(每筆必含:公司、類型、行業、地區/城市、**可談方案組合**、訊號摘要、為何是現在、切入角色、開場話術、來源連結)
+   - A 級明細(每筆必含:公司、類型、行業、地區/城市、**可談方案組合**、預估月消費、訊號摘要、為何是現在、**具名決策人**(從融資新聞/官網/LinkedIn 查證真名與職稱;查不到則註明「待查」並給搜尋建議)、**三版可直接複製的開場訊息**(Email 含主旨行、LinkedIn ≤300 字、Telegram 口語短句;對象為華語公司用中文、否則英文)、來源連結)
    - B 級表格(含方案欄)
    - 觀察中(C 級)
    - 統計 + 舊 A 級跟進提醒(7 天前的 A 級且 status 仍為 new)
 2. 將所有新 Lead(含 C 級)**append** 到 `leads/leads.csv`,欄位:
-   `date_added,company,vertical,type,region,city,signal,score,status,solutions,source_url,notes`
-   - status 初始值 `new`;solutions 依 CLAUDE.md 映射表(分號分隔);含逗號的欄位用雙引號包住。
+   `date_added,company,vertical,type,region,city,signal,score,status,solutions,est_value,source_url,notes`
+   - status 初始值 `new`;solutions 依 CLAUDE.md 映射表(分號分隔);est_value 為預估月消費區間(如 `5k–30k/月`,合作夥伴填 `轉介型(間接)`);含逗號的欄位用雙引號包住。
+
+## 步驟 4.5:每週日附加任務
+
+1. **轉化復盤週報**:寫 `reports/weekly-YYYY-Wnn.md`——本週各狀態變化統計(從 leads.csv 的 notes 狀態軌跡彙整)、回覆率最高的訊號類型/行業、白費力氣的方向、下週搜尋配比調整建議、下週事件行事曆。
+2. **C 級復活掃描**:從庫內 C 級挑 15–20 家(輪替,優先核心地區)以公司名做定向搜尋;有新訊號(融資/擴張/被攻擊/上市)者升級 B/A 並在日報「舊 Lead 新訊號」區列出。
 
 ## 步驟 5:更新儀表板與推送
 

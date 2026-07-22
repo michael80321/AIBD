@@ -1,0 +1,30 @@
+name: 日報漏跑監測
+
+on:
+  schedule:
+    - cron: "30 1 * * *"   # UTC 01:30 = 台北 09:30(排程後 1.5 小時)
+  workflow_dispatch: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/bd-daily-lead-system-lwbumo
+
+      - name: 檢查當日日報是否產出
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          TODAY="$(TZ=Asia/Taipei date +%F)"
+          if [ -f "reports/${TODAY}.md" ]; then
+            echo "OK: 今日日報已產出"
+            exit 0
+          fi
+          echo "MISSING: reports/${TODAY}.md 不存在,發送警報"
+          curl -sS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=⚠️ BD 日報今日(${TODAY})尚未產出——雲端排程可能因容器休眠漏跑。請打開 Claude Code session 說一聲「跑今天的日報」即可補跑。" > /dev/null
+          echo "警報已發送"

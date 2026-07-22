@@ -188,7 +188,7 @@ footer{margin-top:40px;font-size:12.5px;color:var(--muted);display:flex;gap:14px
 <div class="eyebrow" id="sec-db">Lead 資料庫</div>
 <div class="filters" id="filters"></div>
 <div class="tablewrap"><table class="leads">
-  <thead><tr><th>日期</th><th>公司</th><th>行業</th><th>類型</th><th>城市</th><th>地區</th><th>訊號</th><th>方案</th><th>評分</th><th>狀態</th><th>來源</th><th>備註</th></tr></thead>
+  <thead><tr><th>日期</th><th>公司</th><th>行業</th><th>類型</th><th>城市</th><th>地區</th><th>訊號</th><th>方案</th><th>預估月消費</th><th>評分</th><th>狀態</th><th>來源</th><th>備註</th></tr></thead>
   <tbody id="tbody"></tbody>
 </table><div class="empty" id="empty" hidden>沒有符合篩選的 Lead</div></div>
 
@@ -312,6 +312,7 @@ function renderTable() {
     <td>${esc(l.region)}</td>
     <td class="sig">${esc(l.signal)}</td>
     <td class="sols">${solTags(l.solutions)}</td>
+    <td class="nowrap mono" style="font-size:12.5px">${esc(l.est_value || "")}</td>
     <td><span class="pill ${esc(l.score)}">${esc(l.score)}</span></td>
     <td class="nowrap">${esc(l.status)}</td>
     <td class="nowrap"><a href="${esc(l.source_url)}" target="_blank" rel="noopener">連結 ↗</a></td>

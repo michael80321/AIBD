@@ -125,7 +125,9 @@ header.top{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 18px;border
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .filters input{margin-left:auto;padding:6px 12px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;min-width:180px}
 .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
-table.leads{border-collapse:collapse;width:100%;min-width:960px;font-size:14px}
+table.leads{border-collapse:collapse;width:100%;min-width:1180px;font-size:14px}
+.soltag{display:inline-block;background:var(--accent-soft);color:var(--accent);border-radius:4px;padding:0 6px;font-size:11.5px;margin:1px 2px 1px 0;white-space:nowrap}
+.leads td.sols{min-width:150px}
 .leads th{position:sticky;top:0;background:var(--surface);text-align:left;font-size:12px;letter-spacing:.08em;color:var(--muted);border-bottom:2px solid var(--line);padding:10px 12px;white-space:nowrap}
 .leads td{border-bottom:1px solid var(--line);padding:9px 12px;vertical-align:top}
 .leads tr:last-child td{border-bottom:none}
@@ -163,7 +165,7 @@ footer{margin-top:40px;font-size:12.5px;color:var(--muted);display:flex;gap:14px
 <div class="eyebrow">Lead 資料庫</div>
 <div class="filters" id="filters"></div>
 <div class="tablewrap"><table class="leads">
-  <thead><tr><th>日期</th><th>公司</th><th>行業</th><th>類型</th><th>地區</th><th>訊號</th><th>評分</th><th>狀態</th><th>來源</th><th>備註</th></tr></thead>
+  <thead><tr><th>日期</th><th>公司</th><th>行業</th><th>類型</th><th>城市</th><th>地區</th><th>訊號</th><th>方案</th><th>評分</th><th>狀態</th><th>來源</th><th>備註</th></tr></thead>
   <tbody id="tbody"></tbody>
 </table><div class="empty" id="empty" hidden>沒有符合篩選的 Lead</div></div>
 
@@ -198,8 +200,9 @@ const todayA = DATA.leads.filter(l => l.score === "A" && l.date_added === DATA.l
 $("top3").innerHTML = todayA.length ? todayA.slice(0, 3).map(l => `
   <div class="card">
     <h3>${esc(l.company)}</h3>
-    <div class="meta"><span class="pill A">A</span><span>${vdot(l.vertical)}</span><span>${esc(l.type)}</span><span>${esc(l.region)}</span></div>
+    <div class="meta"><span class="pill A">A</span><span>${vdot(l.vertical)}</span><span>${esc(l.type)}</span><span>${esc(l.city || l.region)}</span></div>
     <p>${esc(l.signal)}</p>
+    <p>${(l.solutions || "").split(";").filter(Boolean).map(x => `<span class="soltag">${esc(x)}</span>`).join("")}</p>
     <p class="why">${esc(l.notes)}</p>
     <p><a href="${esc(l.source_url)}" target="_blank" rel="noopener">來源 ↗</a></p>
   </div>`).join("") : `<div class="card" style="border-left-color:var(--c)"><p>今日無 A 級 Lead(依「寧缺勿濫」原則如實回報)。</p></div>`;
@@ -209,10 +212,14 @@ if (DATA.dueFollowups.length) {
     DATA.dueFollowups.map(l => `<li><strong>${esc(l.company)}</strong>(${esc(l.date_added)} 入庫)— ${esc(l.signal)}</li>`).join("") + `</ul></div>`;
 }
 
-const state = { score: "", vertical: "", status: "", q: "" };
+const state = { score: "", vertical: "", status: "", city: "", sol: "", q: "" };
+const CITY_LIST = [...new Set(DATA.leads.map(l => (l.city || "").split("?")[0]).filter(Boolean))];
+const SOL_TAGS = ["DDoS高防", "CDN", "GPU", "模型折扣", "SMS", "直播加速", "雲主機"];
 const FILTER_GROUPS = [
   ["score", ["A", "B", "C"]],
   ["vertical", DATA.verticals],
+  ["sol", SOL_TAGS],
+  ["city", CITY_LIST],
   ["status", [...new Set(DATA.leads.map(l => l.status))]],
 ];
 $("filters").innerHTML = FILTER_GROUPS.map(([key, vals]) =>
@@ -222,16 +229,21 @@ $("filters").innerHTML = FILTER_GROUPS.map(([key, vals]) =>
 function renderTable() {
   const rows = DATA.leads.filter(l =>
     (!state.score || l.score === state.score) &&
-    (!state.vertical || l.vertical === state.vertical) &&
+    (!state.vertical || (l.vertical || "").includes(state.vertical)) &&
     (!state.status || l.status === state.status) &&
-    (!state.q || [l.company, l.signal, l.region, l.notes, l.type].join(" ").toLowerCase().includes(state.q)));
+    (!state.city || (l.city || "").includes(state.city)) &&
+    (!state.sol || (l.solutions || "").includes(state.sol)) &&
+    (!state.q || [l.company, l.signal, l.region, l.city, l.solutions, l.notes, l.type].join(" ").toLowerCase().includes(state.q)));
+  const solTags = s => (s || "").split(";").filter(Boolean).map(x => `<span class="soltag">${esc(x)}</span>`).join("");
   $("tbody").innerHTML = rows.map(l => `<tr>
     <td class="mono nowrap">${esc(l.date_added)}</td>
     <td><strong>${esc(l.company)}</strong></td>
     <td class="nowrap">${vdot(l.vertical)}</td>
     <td class="nowrap">${esc(l.type)}</td>
+    <td class="nowrap">${esc(l.city)}</td>
     <td>${esc(l.region)}</td>
     <td class="sig">${esc(l.signal)}</td>
+    <td class="sols">${solTags(l.solutions)}</td>
     <td><span class="pill ${esc(l.score)}">${esc(l.score)}</span></td>
     <td class="nowrap">${esc(l.status)}</td>
     <td class="nowrap"><a href="${esc(l.source_url)}" target="_blank" rel="noopener">連結 ↗</a></td>

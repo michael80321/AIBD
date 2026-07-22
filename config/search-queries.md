@@ -100,6 +100,17 @@ AI 伴侶 OR 陪伴 App 出海 新加坡 OR 香港
 中國 遊戲 出海 發行 東南亞 {月份}
 ```
 
+### SMS / OTP 需求訊號(每日至少 1 組)
+
+> iGaming/出海 App 每個註冊登入都發 OTP;App 上量 = 簡訊量暴增。所有 iGaming/App 類 Lead 自動帶 SMS 機會。
+
+```
+出海 App 下載量 暴增 OR 上榜 東南亞 {月份}
+app store 榜單 中國 出海 新上榜
+igaming operator user growth registrations {market}
+OTP SMS 成本 出海 開發者
+```
+
 ### 融資資料庫 / Tracker
 ```
 site:crunchbase.com AI startup Singapore OR Taiwan OR "Hong Kong" funding 2026

@@ -31,7 +31,8 @@ allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Glob, Grep
 對每個候選 Lead:
 
 1. **去重**:公司名(含常見別名)已在 `leads/leads.csv` 或 `config/exclusions.csv` → 跳過;除非有重大新訊號(如新融資、被 DDoS),則可更新並在日報註明「舊 Lead 新訊號」。
-2. **對照 ICP**(`config/icp.md` + CLAUDE.md 公司背景)判斷類型(客戶/合作夥伴/ISV)與評分:
+2. **標注方案組合與城市**:依 CLAUDE.md 方案映射表為每筆 Lead 標 `solutions`(可談方案,分號分隔、按優先順序);`city` 標總部/決策人所在城市(不確定則留空或註「待查」)。記住 AI 線已放寬:有 LLM token 消耗即為有效標的(模型折扣線)。
+3. **對照 ICP**(`config/icp.md` + CLAUDE.md 公司背景)判斷類型(客戶/合作夥伴/ISV)與評分:
    - **A**:明確買方訊號 + 符合 ICP(7 天內跟進)
    - **B**:符合 ICP 但訊號間接(2 週內跟進)
    - **C**:觀察,只入庫不進日報重點
@@ -40,14 +41,14 @@ allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Glob, Grep
 ## 步驟 4:產出
 
 1. 依 `reports/_template.md` 寫 `reports/YYYY-MM-DD.md`(用今天日期):
-   - 今日必打 Top 3
-   - A 級明細(每筆必含:公司、類型、行業、地區、訊號摘要、為何是現在、切入角色、開場話術、來源連結)
-   - B 級表格
+   - **今日 5 件事**(行動清單置頂):2–3 件跟進到期 + 2–3 件新開發,每件一行寫明「找誰(公司/角色)、談什麼方案(依 solutions)、用什麼管道」;若有同城多家可打包,註明城市。
+   - A 級明細(每筆必含:公司、類型、行業、地區/城市、**可談方案組合**、訊號摘要、為何是現在、切入角色、開場話術、來源連結)
+   - B 級表格(含方案欄)
    - 觀察中(C 級)
    - 統計 + 舊 A 級跟進提醒(7 天前的 A 級且 status 仍為 new)
 2. 將所有新 Lead(含 C 級)**append** 到 `leads/leads.csv`,欄位:
-   `date_added,company,vertical,type,region,signal,score,status,source_url,notes`
-   - status 初始值 `new`;含逗號的欄位用雙引號包住。
+   `date_added,company,vertical,type,region,city,signal,score,status,solutions,source_url,notes`
+   - status 初始值 `new`;solutions 依 CLAUDE.md 映射表(分號分隔);含逗號的欄位用雙引號包住。
 
 ## 步驟 5:更新儀表板與推送
 

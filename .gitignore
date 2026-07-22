@@ -1,2 +1,3 @@
 config/telegram.env
 logs/
+__pycache__/

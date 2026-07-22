@@ -54,10 +54,22 @@ def build(leads, reports):
     playbook_path = ROOT / "config" / "playbook.md"
     playbook = playbook_path.read_text(encoding="utf-8") if playbook_path.exists() else ""
 
+    def load_csv(path):
+        if not path.exists():
+            return []
+        with path.open(encoding="utf-8") as f:
+            return [r for r in csv.DictReader(f) if any(v.strip() for v in r.values())]
+
+    deals = load_csv(ROOT / "deals" / "deals.csv")
+    incomes = load_csv(ROOT / "finance" / "income.csv")
+
     data = {
         "generated": now.strftime("%Y-%m-%d %H:%M"),
         "latestDate": latest_date,
         "playbook": playbook,
+        "deals": deals,
+        "incomes": incomes,
+        "thisMonth": now.strftime("%Y-%m"),
         "today": {"A": count(today_rows, "A"), "B": count(today_rows, "B"), "C": count(today_rows, "C")},
         "totals": {"all": len(leads), "A": count(leads, "A"), "B": count(leads, "B"), "C": count(leads, "C")},
         "dueFollowups": due,
@@ -125,6 +137,8 @@ header.top{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 18px;border
 .pill.A{background:var(--a-soft);color:var(--a)} .pill.B{background:var(--b-soft);color:var(--b)} .pill.C{background:var(--c-soft);color:var(--c)}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:1px}
 .due{background:var(--surface);border:1px solid var(--b);border-radius:6px;padding:12px 16px;font-size:14px}
+.dealhint{font-size:13px;color:var(--muted);margin:0 0 10px}
+.dealhint code{background:var(--accent-soft);color:var(--accent);border-radius:4px;padding:1px 6px;font-size:12.5px}
 .due ul{margin:6px 0 0;padding-left:20px}
 
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
@@ -167,6 +181,8 @@ footer{margin-top:40px;font-size:12.5px;color:var(--muted);display:flex;gap:14px
 
 <nav class="topnav">
   <a href="#sec-today">今日行動</a>
+  <a href="#sec-deals">跟單</a>
+  <a href="#sec-money">收入資產</a>
   <a href="#sec-pipeline">Pipeline</a>
   <a href="#sec-db">資料庫</a>
   <a href="#sec-history">歷史</a>
@@ -177,6 +193,20 @@ footer{margin-top:40px;font-size:12.5px;color:var(--muted);display:flex;gap:14px
 <div class="eyebrow" id="sec-today">今日必打(A 級)</div>
 <div class="top3" id="top3"></div>
 <div id="dueBox"></div>
+
+<div class="eyebrow" id="sec-deals">跟單(進行中的案子)</div>
+<p class="dealhint">用 Telegram 管理:「<code>開案 公司 方案 月費</code>」開新案 →「<code>公司 報價</code>」「<code>公司 談判</code>」「<code>公司 簽約 15%</code>」「<code>公司 上線</code>」推進 →「<code>公司 進度 70%</code>」修成功率 →「<code>公司 收入 1200</code>」記帳。</p>
+<div class="tablewrap"><table class="leads" style="min-width:900px">
+  <thead><tr><th>案子</th><th>方案</th><th>階段</th><th>成功率</th><th>預估月費</th><th>傭金%</th><th>預估月傭金</th><th>下一步</th><th>開案日</th></tr></thead>
+  <tbody id="dealsBody"></tbody>
+</table></div>
+
+<div class="eyebrow" id="sec-money">收入資產</div>
+<div class="counts" id="moneyChips" style="margin-left:0"></div>
+<div class="tablewrap" style="margin-top:10px"><table class="leads" style="min-width:520px">
+  <thead><tr><th>月份</th><th>公司</th><th>金額(USD)</th><th>類型</th><th>備註</th></tr></thead>
+  <tbody id="incomeBody"></tbody>
+</table></div>
 
 <div class="eyebrow" id="sec-pipeline">Pipeline 狀態</div>
 <div class="filters" id="statusChips"></div>
@@ -243,6 +273,42 @@ if (DATA.dueFollowups.length) {
   $("dueBox").innerHTML = `<div class="eyebrow">跟進到期提醒</div><div class="due">以下 A 級 Lead 入庫已滿 7 天仍未接觸:<ul>` +
     DATA.dueFollowups.map(l => `<li><strong>${esc(l.company)}</strong>(${esc(l.date_added)} 入庫)— ${esc(l.signal)}</li>`).join("") + `</ul></div>`;
 }
+
+// ---- 跟單 + 收入資產 ----
+const STAGE_ZH = {open:"已開案", quoted:"已報價", negotiating:"談判中", signed:"已簽約", live:"上線收款", churned:"丟單", paused:"暫停"};
+const NEXT_HINT = {open:"首次觸達+約 15 分鐘通話", quoted:"報價後 48h 內追一次,附成本對比", negotiating:"找出卡點(價格/合規/技術),拉供應商資源", signed:"盯上線時程,順勢開第二方案", live:"每月對帳;90 天內做擴售(cross-sell)", paused:"設 30 天後回訪提醒", churned:"記錄丟單原因進週報"};
+const activeDeals = (DATA.deals || []).filter(d => d.stage !== "churned");
+const commOf = d => {
+  const mrr = parseFloat(d.est_mrr_usd) || 0;
+  const pct = parseFloat(d.commission_pct) || 15;  // 未填以 15% 估
+  return mrr * pct / 100;
+};
+$("dealsBody").innerHTML = activeDeals.map(d => `<tr>
+  <td><strong>${esc(d.company)}</strong></td>
+  <td class="nowrap">${esc(d.solution)}</td>
+  <td class="nowrap"><span class="pill ${d.stage === "live" || d.stage === "signed" ? "A" : "B"}">${esc(STAGE_ZH[d.stage] || d.stage)}</span></td>
+  <td class="mono">${esc(d.probability)}%</td>
+  <td class="mono nowrap">$${esc(d.est_mrr_usd || "0")}</td>
+  <td class="mono">${esc(d.commission_pct || "15*")}%</td>
+  <td class="mono nowrap">$${Math.round(commOf(d))}</td>
+  <td>${esc(d.next_action || NEXT_HINT[d.stage] || "")}<br><span class="why" style="font-size:12px">${esc(NEXT_HINT[d.stage] || "")}</span></td>
+  <td class="mono nowrap">${esc(d.start_date)}</td></tr>`).join("") ||
+  '<tr><td colspan="9" class="empty">尚無進行中案子——TG 說「開案 公司名 方案 月費」開第一單</td></tr>';
+
+const signedMonthly = activeDeals.filter(d => d.stage === "signed" || d.stage === "live").reduce((s, d) => s + commOf(d), 0);
+const weighted = activeDeals.filter(d => !["signed","live"].includes(d.stage)).reduce((s, d) => s + commOf(d) * (parseFloat(d.probability) || 0) / 100, 0);
+const incThisMonth = (DATA.incomes || []).filter(i => i.month === DATA.thisMonth).reduce((s, i) => s + (parseFloat(i.amount_usd) || 0), 0);
+const incTotal = (DATA.incomes || []).reduce((s, i) => s + (parseFloat(i.amount_usd) || 0), 0);
+$("moneyChips").innerHTML =
+  `<span class="count">本月已收 <strong>$${Math.round(incThisMonth)}</strong></span>` +
+  `<span class="count">累計已收 <strong>$${Math.round(incTotal)}</strong></span>` +
+  `<span class="count sA">簽約月傭金(經常性) <strong>$${Math.round(signedMonthly)}</strong></span>` +
+  `<span class="count sB">加權 pipeline 預期/月 <strong>$${Math.round(weighted)}</strong></span>` +
+  `<span class="count">進行中案子 <strong>${activeDeals.length}</strong></span>`;
+$("incomeBody").innerHTML = (DATA.incomes || []).slice().reverse().map(i => `<tr>
+  <td class="mono nowrap">${esc(i.month)}</td><td>${esc(i.company)}</td>
+  <td class="mono">$${esc(i.amount_usd)}</td><td class="nowrap">${esc(i.type)}</td><td>${esc(i.notes)}</td></tr>`).join("") ||
+  '<tr><td colspan="5" class="empty">尚無收入紀錄——簽約後 TG 說「公司名 收入 金額」記第一筆</td></tr>';
 
 // ---- Pipeline 狀態 + 逾期追蹤 ----
 const STATUS_LABEL = {new:"未接觸", contacted:"已接觸", replied:"有回覆", meeting:"已約談", won:"成交", lost:"失單", cold:"冷凍", dropped:"放棄"};

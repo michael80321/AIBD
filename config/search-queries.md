@@ -100,6 +100,19 @@ AI 伴侶 OR 陪伴 App 出海 新加坡 OR 香港
 中國 遊戲 出海 發行 東南亞 {月份}
 ```
 
+### 聚合商 / 平台商(每日至少 1 組;最高槓桿——綁一家帶整批下游)
+
+> 綁定一家聚合商/白牌商=帶進它整批下游營運商(全都要 CDN/高防/雲/SMS)。掃到新的一律入庫,附開場訊息。詳見 `config/targets-aggregators.md`。
+
+```
+new casino game aggregator OR platform provider launch {月份}
+igaming aggregator API integration partnership Asia
+white label casino OR sportsbook platform new provider {市場}
+game aggregator adds OR integrates studio {月份}
+streaming OR OTT platform SaaS provider Asia launch
+AI model aggregator OR API marketplace {月份}
+```
+
 ### SMS / OTP 需求訊號(每日至少 1 組)
 
 > iGaming/出海 App 每個註冊登入都發 OTP;App 上量 = 簡訊量暴增。所有 iGaming/App 類 Lead 自動帶 SMS 機會。

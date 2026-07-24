@@ -20,6 +20,7 @@ allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Glob, Grep
 
 - 對 **AI、iGaming、成人、賽事/體育** 四個行業,**每行業至少執行 8 組搜尋**(從 `config/search-queries.md` 的模板挑選/變化,並將日期佔位符替換為實際近期日期;可混用英/中/西語)。
 - **另加至少 4 組「定向挖掘」搜尋**(不依賴新聞事件):展會參展商名單(SiGMA、SBC、G2E Asia、ICE)、行業名錄(白牌平台商、聚合商、成人平台目錄)、融資資料庫頁(Crunchbase、Dealroom、funding tracker)——見 `config/search-queries.md` 定向挖掘章節。
+- **聚合商/平台商軌道(每日必掃 ≥1 組,最高槓桿)**:掃到任何**新的**遊戲聚合商、白牌平台商、OTT/串流方案商、AI 模型 API 市集——只要不在庫,一律入庫(綁一家帶整批下游)。新發現者同步更新 `config/targets-aggregators.md` 總表;A/B 級附開場訊息。
 - **時間窗**:
   - **A 級訊號**:限近 7 天(「被 DDoS/宕機」限近 3 天)——不放寬。
   - **B 級訊號**:可放寬至近 14 天;名錄/展會/結構型標的不受時間窗限制,但須符合 ICP 且附名錄來源連結。
@@ -41,7 +42,7 @@ allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Glob, Grep
 ## 步驟 4:產出
 
 1. 依 `reports/_template.md` 寫 `reports/YYYY-MM-DD.md`(用今天日期):
-   - **今日 5 件事**(行動清單置頂):先讀 `deals/deals.csv`——`next_date` 到期或階段停滯 >5 天的案子優先列入;其餘為 2–3 件跟進到期 + 新開發。每件一行寫明「找誰(公司/角色)、談什麼方案(依 solutions)、用什麼管道」;同城多家可打包時註明城市。簽約/上線案並提醒 cross-sell 下一方案。
+   - **今日 5 件事**(行動清單置頂):先讀 `deals/deals.csv`——`next_date` 到期或階段停滯 >5 天的案子優先列入;其餘為 2–3 件跟進到期 + 新開發。**新開發至少含 1 件聚合商/平台商**(從 `config/targets-aggregators.md` 未接觸者輪替,或當日新發現者);每件一行寫明「找誰(公司/角色)、談什麼方案(依 solutions)、用什麼管道」;同城多家可打包時註明城市。簽約/上線案並提醒 cross-sell 下一方案。
    - A 級明細(每筆必含:公司、類型、行業、地區/城市、**可談方案組合**、預估月消費、訊號摘要、為何是現在、**具名決策人**(從融資新聞/官網/LinkedIn 查證真名與職稱;查不到則註明「待查」並給搜尋建議)、**三版可直接複製的開場訊息**(Email 含主旨行、LinkedIn ≤300 字、Telegram 口語短句;對象為華語公司用中文、否則英文)、來源連結)
    - B 級表格(含方案欄)
    - 觀察中(C 級)

@@ -30,6 +30,34 @@
 3. **EveryMatrix 當大魚養**:市場最大、下游最多,但體量大、決策慢——長線經營,先從單一區域節點或高防試單切入。
 4. **菲律賓 Future Grid Labs**:搭 PAGCOR 合規潮(7/13 AML 令),用「合規期一併檢視基建」話術。
 
+## 開場訊息(亞洲三家,直接複製)
+
+### Uplatform
+- 📧 主旨:Powering your Asia operators' infrastructure — multi-cloud, one bill
+  > Hi {name}, Uplatform's Asia-focused aggregation means your operators need low-latency CDN, DDoS protection and cloud across TW/HK/SG/MY. We're a multi-cloud broker (Alibaba Cloud-led + multiple suppliers) — we can bundle infra for you and your downstream operators at a better price than single-vendor. 15 min to compare?
+- 💼 LinkedIn:
+  > 恭喜 Uplatform 在亞洲的成長!我們幫聚合商和其下游營運商做 CDN/高防/雲的多雲比價組合,亞太節點覆蓋密。想給你一份針對你們 Asia 客群的基建對比——方便聊聊嗎?
+- ✈️ Telegram:
+  > Hi,做多雲方案經紀(CDN/高防/雲/SMS),專幫 iGaming 聚合商和下游營運商省基建成本,亞太節點強。給你看份對比?
+
+### VeliGames
+- 📧 主旨:Infra bundle for your Asia casino content clients
+  > Hi {name}, VeliGames serves Asian operators who all need CDN, anti-DDoS and regional cloud. As a multi-cloud broker we can package this for you as a value-add to your clients — better pricing via multi-supplier比價, sensitive-industry-friendly. Worth 15 minutes?
+- 💼 LinkedIn:
+  > VeliGames 專營亞洲聚合——你的下游營運商全都要高防+CDN+節點。我做多雲組合比價,能當你的加值服務一起打包。想聊聊嗎?
+- ✈️ Telegram:
+  > 哈囉,多雲方案經紀,幫亞洲 iGaming 聚合商的下游做高防/CDN/雲比價,敏感行業也有解。要份對比嗎?
+
+### Digitain Asia
+- 📧 主旨:Multi-cloud infra for Digitain's Asia operator network
+  > Hi {name}, Digitain Asia's operator network needs resilient CDN + DDoS + cloud across the region. We broker multi-cloud (Alibaba Cloud-led + others) and can bundle infra for your downstream operators at competitive rates. Open to a quick comparison?
+- 💼 LinkedIn:
+  > 看到 Digitain 在亞洲的佈局。你們的營運商網路需要跨區 CDN+高防+雲——我做多雲比價組合,可當加值方案打包給下游。方便連結聊聊?
+- ✈️ Telegram:
+  > Hi,多雲經紀(CDN/高防/雲/SMS),幫 Digitain 亞洲下游營運商省基建。給你看份對比?
+
+> **話術要點**:對聚合商永遠強調兩層——(1)你自己的整合基建(跨區延遲、穩定性);(2)你下游營運商的高防/CDN/節點需求,我可以當你的「加值服務」一起打包,你賺服務財、我賺基建財。API-first 型(Hub88)加一句「輕量基建最能凸顯多供應商比價的省法」。
+
 ## 展會捷徑
 
 SiGMA Asia(馬尼拉)、G2E Asia(澳門)、ICE 的聚合商展位幾乎全員到齊——一場展會 TG 全加,比冷觸達快 10 倍。見 `config/playbook.md` 展會行事曆。

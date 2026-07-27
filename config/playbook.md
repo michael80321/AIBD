@@ -7,6 +7,29 @@
 - **阿里系引薦鏈**:凡是阿里/螞蟻/阿里雲投資或領投的公司(庫內:AIsa、Tripo AI、Zeroth、AIsphere、Even Realities 等),你作為阿里雲 BD 有天然的 warm intro 路徑——先查該輪的阿里投資團隊窗口,請投後或生態團隊引薦,回覆率比冷觸達高 5–10 倍。
 - **同城打包**:出差前先在儀表板按城市篩選,一次約 3–5 家;見面永遠勝過訊息。
 
+## 🔍 怎麼拿到窗口的聯絡方式(Email / 決策人)
+
+> 每筆 A 級日報已自動附「窗口挖掘指引」,以下是背後完整方法。
+
+**成功率排序:**
+1. **官網**:`公司名 about/team/contact`。新創 CTO/創辦人 email 常掛官網或新聞稿聯絡人欄。看到一個真 email 就破解全公司格式。
+2. **Email 格式破解 + 驗證**:知道人名就猜 `first@` / `first.last@` / `flast@`,用工具驗證:
+   - **Hunter.io**(免費 25/月)輸 domain 列格式+現成聯絡人
+   - **Apollo.io**(免費額度大、亞太覆蓋好)輸公司名列人+職稱+email+LinkedIn
+   - RocketReach / Snov.io 補充
+3. **LinkedIn**:Sales Navigator 篩「公司+職稱 infra/platform/CTO/採購」;新創找 Co-founder。**AI/國際公司常常 LinkedIn 私訊比 email 更快**。
+4. **阿里系引薦(你的專屬武器)**:凡阿里/螞蟻/阿里雲投資的公司,走內部投後/生態團隊要 warm intro,回覆率遠高於冷觸達——別的雲 BD 沒這條路。
+
+**分渠道對應:**
+| 客戶類型 | 最佳挖法 |
+|---|---|
+| 大陸 AI/短劇 | 阿里系引薦 > 脈脈搜技術負責人 > 微信(展會掃碼)> 官網 |
+| 國際 AI | LinkedIn 創辦人 + Apollo 驗 email |
+| iGaming/聚合商 | 官網 sales@ + Telegram(展會加人) |
+| 成人/成人 AI | 官網 contact + Telegram,低調 |
+
+**寄送合規**:Hunter/Apollo 給的是 B2B 商業聯絡資訊,正常開發用途 OK;但第一封務必一對一客製、附明確停聯方式,勿群發轟炸(各地反垃圾規範+保護送信域名信譽)。
+
 ## 🎯 窗口怎麼找(按管道)
 
 ### LinkedIn(AI / 賽事 / 國際 iGaming 首選)

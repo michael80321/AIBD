@@ -36,6 +36,13 @@
 - ✈️ Telegram:
   > {口語短句}
 
+**🔍 窗口挖掘指引(去哪拿聯絡方式)**
+- 官網:{domain}(查 /about /team /contact)
+- Email 猜測:`name@{domain}`、`first.last@{domain}`、`flast@{domain}` → 用 Hunter.io/Apollo.io 驗證
+- LinkedIn 搜:`{公司名} CTO` / `{公司名} infrastructure`
+- 最佳渠道:{阿里系引薦 / LinkedIn / Telegram / 脈脈微信…}
+- 阿里系引薦:{✅ 可走投後生態 / —}
+
 (每筆 A 級重複上表)
 
 ---

@@ -113,6 +113,16 @@ streaming OR OTT platform SaaS provider Asia launch
 AI model aggregator OR API marketplace {月份}
 ```
 
+### 落地服務商 / 加速器(夥伴金礦——握有一批剛落地選 infra 的 AI 公司)
+
+> 公司設立 SaaS、律所、新加坡/香港 AI 加速器,每家都能持續轉介剛落地、正在選雲/GPU 的 AI 客戶。
+
+```
+company incorporation OR setup service AI startups Singapore OR Hong Kong
+AI accelerator OR incubator cohort Singapore OR Hong Kong {月份}
+律所 OR 顧問 協助 AI 企業 出海 落地 新加坡 OR 香港
+```
+
 ### SMS / OTP 需求訊號(每日至少 1 組)
 
 > iGaming/出海 App 每個註冊登入都發 OTP;App 上量 = 簡訊量暴增。所有 iGaming/App 類 Lead 自動帶 SMS 機會。

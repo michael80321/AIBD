@@ -145,6 +145,9 @@ header.top{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 18px;border
 .chip{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:4px 13px;font-size:13px;cursor:pointer;font-family:inherit}
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .filters input{margin-left:auto;padding:6px 12px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;min-width:180px}
+.fgrp{display:flex;flex-wrap:wrap;gap:6px;align-items:center;width:100%}
+.flabel{font-size:11px;letter-spacing:.1em;color:var(--muted);min-width:56px;text-transform:uppercase}
+.fnote{font-size:12.5px;color:var(--muted)}
 .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
 table.leads{border-collapse:collapse;width:100%;min-width:1180px;font-size:14px}
 .soltag{display:inline-block;background:var(--accent-soft);color:var(--accent);border-radius:4px;padding:0 6px;font-size:11.5px;margin:1px 2px 1px 0;white-space:nowrap}
@@ -218,7 +221,7 @@ footer{margin-top:40px;font-size:12.5px;color:var(--muted);display:flex;gap:14px
 <div class="eyebrow" id="sec-db">Lead 資料庫</div>
 <div class="filters" id="filters"></div>
 <div class="tablewrap"><table class="leads">
-  <thead><tr><th>日期</th><th>公司</th><th>行業</th><th>類型</th><th>城市</th><th>地區</th><th>訊號</th><th>方案</th><th>預估月消費</th><th>評分</th><th>狀態</th><th>來源</th><th>備註</th></tr></thead>
+  <thead><tr><th>日期</th><th>公司</th><th>行業</th><th>類型</th><th>國家</th><th>城市</th><th>地區</th><th>訊號</th><th>方案</th><th>預估月消費</th><th>評分</th><th>狀態</th><th>來源</th><th>備註</th></tr></thead>
   <tbody id="tbody"></tbody>
 </table><div class="empty" id="empty" hidden>沒有符合篩選的 Lead</div></div>
 
@@ -346,34 +349,54 @@ $("historyBody").innerHTML = Object.keys(byDate).sort().map(d => {
   return `<tr><td class="mono nowrap">${esc(d)}</td><td class="mono">${c.A||0}</td><td class="mono">${c.B||0}</td><td class="mono">${c.C||0}</td><td class="mono">${day}</td><td class="mono">${cum}</td></tr>`;
 }).join("");
 
-const state = { score: "", vertical: "", status: "", city: "", sol: "", q: "" };
-const CITY_LIST = [...new Set(DATA.leads.map(l => (l.city || "").split("?")[0]).filter(Boolean))];
+const state = { score: "", vertical: "", status: "", country: "", city: "", sol: "", q: "" };
+const cityClean = l => (l.city || "").split("?")[0].trim();
 const SOL_TAGS = ["DDoS高防", "CDN", "GPU", "模型折扣", "SMS", "直播加速", "雲主機"];
-const FILTER_GROUPS = [
-  ["score", ["A", "B", "C"]],
-  ["vertical", DATA.verticals],
-  ["sol", SOL_TAGS],
-  ["city", CITY_LIST],
-  ["status", [...new Set(DATA.leads.map(l => l.status))]],
-];
-$("filters").innerHTML = FILTER_GROUPS.map(([key, vals]) =>
-  vals.map(v => `<button class="chip" data-key="${key}" data-val="${esc(v)}" aria-pressed="false">${esc(v)}</button>`).join("")
-).join("") + `<input type="search" id="q" placeholder="搜尋公司/訊號/地區…" aria-label="搜尋">`;
+// 國家 → 城市 對照(依現有資料建立;城市按該國 Lead 數排序)
+const COUNTRY_CITIES = {};
+DATA.leads.forEach(l => {
+  const cn = l.country || "待查", c = cityClean(l);
+  (COUNTRY_CITIES[cn] = COUNTRY_CITIES[cn] || new Set());
+  if (c) COUNTRY_CITIES[cn].add(c);
+});
+const countByCountry = {};
+DATA.leads.forEach(l => { countByCountry[l.country || "待查"] = (countByCountry[l.country || "待查"] || 0) + 1; });
+const COUNTRY_LIST = Object.keys(countByCountry).sort((a, b) => countByCountry[b] - countByCountry[a]);
+
+function renderFilters() {
+  const chip = (key, v, label) => `<button class="chip" data-key="${key}" data-val="${esc(v)}" aria-pressed="${state[key] === v}">${esc(label || v)}</button>`;
+  const grp = (title, html) => `<div class="fgrp"><span class="flabel">${title}</span>${html}</div>`;
+  // 城市選項:選了國家就只顯示該國城市,否則顯示全部(去重)
+  const cityPool = state.country
+    ? [...(COUNTRY_CITIES[state.country] || [])]
+    : [...new Set(DATA.leads.map(cityClean).filter(Boolean))];
+  $("filters").innerHTML =
+    grp("評分", ["A", "B", "C"].map(v => chip("score", v)).join("")) +
+    grp("行業", DATA.verticals.map(v => chip("vertical", v)).join("")) +
+    grp("國家", COUNTRY_LIST.map(v => chip("country", v, `${v}·${countByCountry[v]}`)).join("")) +
+    grp("城市" + (state.country ? `(${state.country})` : ""), cityPool.length ? cityPool.map(v => chip("city", v)).join("") : '<span class="fnote">此國無城市顆粒</span>') +
+    grp("方案", SOL_TAGS.map(v => chip("sol", v)).join("")) +
+    grp("狀態", [...new Set(DATA.leads.map(l => l.status))].map(v => chip("status", v)).join("")) +
+    `<input type="search" id="q" placeholder="搜尋公司/訊號/城市…" aria-label="搜尋" value="${esc(state.q)}">`;
+}
+renderFilters();
 
 function renderTable() {
   const rows = DATA.leads.filter(l =>
     (!state.score || l.score === state.score) &&
     (!state.vertical || (l.vertical || "").includes(state.vertical)) &&
     (!state.status || l.status === state.status) &&
-    (!state.city || (l.city || "").includes(state.city)) &&
+    (!state.country || (l.country || "") === state.country) &&
+    (!state.city || cityClean(l) === state.city) &&
     (!state.sol || (l.solutions || "").includes(state.sol)) &&
-    (!state.q || [l.company, l.signal, l.region, l.city, l.solutions, l.notes, l.type].join(" ").toLowerCase().includes(state.q)));
+    (!state.q || [l.company, l.signal, l.region, l.city, l.country, l.solutions, l.notes, l.type].join(" ").toLowerCase().includes(state.q)));
   const solTags = s => (s || "").split(";").filter(Boolean).map(x => `<span class="soltag">${esc(x)}</span>`).join("");
   $("tbody").innerHTML = rows.map(l => `<tr>
     <td class="mono nowrap">${esc(l.date_added)}</td>
     <td><strong>${esc(l.company)}</strong></td>
     <td class="nowrap">${vdot(l.vertical)}</td>
     <td class="nowrap">${esc(l.type)}</td>
+    <td class="nowrap">${esc(l.country || "")}</td>
     <td class="nowrap">${esc(l.city)}</td>
     <td>${esc(l.region)}</td>
     <td class="sig">${esc(l.signal)}</td>
@@ -389,8 +412,14 @@ $("filters").addEventListener("click", e => {
   const b = e.target.closest(".chip"); if (!b) return;
   const { key, val } = b.dataset;
   state[key] = state[key] === val ? "" : val;
-  document.querySelectorAll(`.chip[data-key="${key}"]`).forEach(x =>
-    x.setAttribute("aria-pressed", String(state[key] === x.dataset.val)));
+  if (key === "country") {
+    // 切換國家時,若已選城市不屬於該國則清掉,並重繪城市選項
+    if (state.city && state.country && !(COUNTRY_CITIES[state.country] || new Set()).has(state.city)) state.city = "";
+    renderFilters();
+  } else {
+    document.querySelectorAll(`.chip[data-key="${key}"]`).forEach(x =>
+      x.setAttribute("aria-pressed", String(state[key] === x.dataset.val)));
+  }
   renderTable();
 });
 $("filters").addEventListener("input", e => {

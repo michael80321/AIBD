@@ -54,8 +54,8 @@ allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Glob, Grep
    - 觀察中(C 級)
    - 統計 + 舊 A 級跟進提醒(7 天前的 A 級且 status 仍為 new)
 2. 將所有新 Lead(含 C 級)**append** 到 `leads/leads.csv`,欄位:
-   `date_added,company,vertical,type,region,city,signal,score,status,solutions,est_value,source_url,notes`
-   - status 初始值 `new`;solutions 依 CLAUDE.md 映射表(分號分隔);est_value 為預估月消費區間(如 `5k–30k/月`,合作夥伴填 `轉介型(間接)`);含逗號的欄位用雙引號包住。
+   `date_added,company,vertical,type,region,city,country,signal,score,status,solutions,est_value,source_url,notes`
+   - status 初始值 `new`;**country 填國家**(中國/香港/台灣/新加坡/馬來西亞/菲律賓/日本/韓國/美國/歐洲…,不確定填「待查」);city 填城市(不確定留空或註「待查」);solutions 依 CLAUDE.md 映射表(分號分隔);est_value 為預估月消費區間;含逗號的欄位用雙引號包住。儀表板支援「國家→城市」階層篩選。
 
 ## 步驟 4.5:每週日附加任務
 

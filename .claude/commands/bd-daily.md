@@ -47,7 +47,7 @@ allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Glob, Grep
    - **窗口挖掘指引**(每筆 A 級必附,教使用者去哪拿到聯絡方式):
      1. **官網 domain**:給出公司官網網址(從來源或搜尋確認);提示查 about/team/contact 頁
      2. **Email 格式猜測**:依 domain 給 3 種常見格式(`first@`、`first.last@`、`flast@`),提示用 Hunter.io / Apollo.io 驗證
-     3. **LinkedIn 搜尋關鍵字**:給可直接貼進 LinkedIn/Sales Navigator 的字串(如 `公司名 CTO`、`公司名 infrastructure`)
+     3. **該搜的精確職稱**(依 `config/roles.md` 該類別):列出「該搜職稱(含採購線)」與「一律避開(HR/Recruiter/Support/客服)」,給可直接貼進 LinkedIn/Sales Navigator/Apollo/脈脈的職稱字串(如 `公司名 CTO`、`公司名 採購`、`公司名 Head of Infrastructure`)
      4. **最佳渠道**:依 CLAUDE.md/playbook 對應(大陸 AI/短劇→阿里系引薦+脈脈+微信;國際 AI→LinkedIn+Apollo;iGaming/聚合商→官網 sales@+Telegram;成人→官網+Telegram 低調)
      5. **阿里系引薦路徑**:若該公司由阿里/螞蟻/阿里雲投資或領投,明確標「✅ 可走阿里投後/生態引薦」;否則標「—」
    - B 級表格(含方案欄)
@@ -61,6 +61,7 @@ allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Glob, Grep
 
 1. **轉化復盤週報**:寫 `reports/weekly-YYYY-Wnn.md`——本週各狀態變化統計(從 leads.csv 的 notes 狀態軌跡彙整)、回覆率最高的訊號類型/行業、白費力氣的方向、下週搜尋配比調整建議、下週事件行事曆。
 2. **C 級復活掃描**:從庫內 C 級挑 15–20 家(輪替,優先核心地區)以公司名做定向搜尋;有新訊號(融資/擴張/被攻擊/上市)者升級 B/A 並在日報「舊 Lead 新訊號」區列出。
+3. **重生脈脈配方**:執行 `python3 scripts/gen_maimai.py` 重新生成 `reports/maimai-lookup.md`(全部中文客戶的脈脈搜尋職稱清單)。
 
 ## 步驟 5:更新儀表板與推送
 

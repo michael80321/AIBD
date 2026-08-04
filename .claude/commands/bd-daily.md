@@ -47,7 +47,9 @@ allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Glob, Grep
    - **窗口挖掘指引**(每筆 A 級必附,教使用者去哪拿到聯絡方式):
      1. **官網 domain**:給出公司官網網址(從來源或搜尋確認);提示查 about/team/contact 頁
      2. **Email 格式猜測**:依 domain 給 3 種常見格式(`first@`、`first.last@`、`flast@`),提示用 Hunter.io / Apollo.io 驗證
-     3. **該搜的精確職稱**(依 `config/roles.md` 該類別):列出「該搜職稱(含採購線)」與「一律避開(HR/Recruiter/Support/客服)」,給可直接貼進 LinkedIn/Sales Navigator/Apollo/脈脈的職稱字串(如 `公司名 CTO`、`公司名 採購`、`公司名 Head of Infrastructure`)
+     3. **該搜的精確職稱**(依 `config/roles.md` 該類別):列出「該搜職稱(含採購線)」與「一律避開(HR/Recruiter/Support/客服)」。
+        - **若 country=中國/香港/台灣**:改用大陸版指引——「①企查查/天眼查查法人+高管姓名 → ②脈脈篩上述職稱 → ③IT桔子查投資方(阿里/螞蟻投資者標✅可引薦)→ ④微信成交;大陸別猜 email」。
+        - **否則(國際)**:給 LinkedIn/Apollo 職稱字串 + email 格式猜測。
      4. **最佳渠道**:依 CLAUDE.md/playbook 對應(大陸 AI/短劇→阿里系引薦+脈脈+微信;國際 AI→LinkedIn+Apollo;iGaming/聚合商→官網 sales@+Telegram;成人→官網+Telegram 低調)
      5. **阿里系引薦路徑**:若該公司由阿里/螞蟻/阿里雲投資或領投,明確標「✅ 可走阿里投後/生態引薦」;否則標「—」
    - B 級表格(含方案欄)

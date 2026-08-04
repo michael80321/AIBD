@@ -123,7 +123,7 @@ date_added,company,vertical,type,region,city,signal,score,status,solutions,est_v
 2026-07-24,Hub88,iGaming,ISV,馬爾他/全球,,"結構型:API-first 聚合平台,主打快速整合與輕量基建 → 基建成本敏感、正對味多雲比價",B,new,DDoS高防;CDN;雲主機;SMS-OTP,10k–50k/月(綁定下游),https://igamingexpress.com/casino-games-aggregators/,API-first;輕量基建=價格敏感
 2026-07-24,NuxGame,iGaming,ISV,歐洲(亞洲客群),,"結構型:17,500+ 遊戲/140+ 供應商,支援 180+ 幣別含加密;含 SmartSoft 等整合",B,new,DDoS高防;CDN;雲主機;SMS-OTP,10k–50k/月(綁定下游),https://nuxgame.com/games/smartsoft-gaming,聚合+白牌;加密友善
 2026-07-24,Uplatform,iGaming,ISV,亞洲聚焦,,"結構型:明確主打 iGaming Asia 的聚合+體育平台,亞洲下游客群密集",B,new,DDoS高防;CDN;雲主機;SMS-OTP,10k–50k/月(綁定下游),https://uplatform.com/igaming-asia,亞洲聚焦=地區契合
-2026-07-24,VeliGames,iGaming,ISV,亞洲,,結構型:專營亞洲市場的線上賭場內容聚合軟體,B,new,DDoS高防;CDN;雲主機;SMS-OTP,10k–50k/月(綁定下游),https://veligames.io/asia/,亞洲聚合商;地區契合
+2026-07-24,VeliGames,iGaming,ISV,亞洲,,結構型:專營亞洲市場的線上賭場內容聚合軟體,B,new,DDoS高防;CDN;雲主機;SMS-OTP,10k–50k/月(綁定下游),https://veligames.io/asia/,"亞洲聚合商;地區契合;8/4 補強:Veli Asia Victory System 1 天上線、35000+ 遊戲/160+ 供應商,SiGMA Asia 2026 最佳 Crash 組合"
 2026-07-24,Digitain Asia,iGaming,ISV,亞洲,,結構型:Digitain 亞洲分支的遊戲聚合產品線;亞洲下游營運商,B,new,DDoS高防;CDN;雲主機;SMS-OTP,10k–50k/月(綁定下游),https://digitainasia.com/en/products/casino-games-aggregator/,亞洲據點;與現有 Digitain 同源
 2026-07-24,Future Grid Labs,iGaming,ISV,菲律賓,馬尼拉?(待查),結構型:主打菲律賓市場的 Casino Games API 供應商,C,new,DDoS高防;CDN;雲主機;SMS-OTP,5k–30k/月,https://futuregridlabs.com/casino-games-api-in-philippines/,菲律賓在地聚合;PAGCOR 生態
 2026-07-24,SmartSoft Gaming,iGaming,ISV,喬治亞/全球,,"結構型:2015 成立的遊戲供應商(JetX 等),經 NuxGame 等聚合分發",C,new,DDoS高防;CDN;雲主機,10k–50k/月(綁定下游),https://nuxgame.com/games/smartsoft-gaming,內容 studio;透過聚合商觸達

@@ -28,7 +28,10 @@ jobs:
           fi
           DATE="$(basename "$REPORT" .md)"
           API="https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}"
-          SUMMARY="$(awk '/^## 🎯/,/^---/' "$REPORT" | grep -v '^---' | sed 's/[*#|]//g' | head -c 3500)"
+          SUMMARY="$(awk '/^## .*今日 5 件事/,/^---/' "$REPORT" | grep -v '^---' | sed 's/[*#|]//g' | head -c 3500 || true)"
+          if [ -z "$SUMMARY" ]; then
+            SUMMARY="$(head -c 1500 "$REPORT" | sed 's/[*#|]//g' || true)"
+          fi
           STATS="$(grep -m1 '最終' "$REPORT" | sed 's/[*#-]//g' || true)"
           curl -sS -X POST "$API/sendMessage" \
             --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \

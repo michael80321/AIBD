@@ -22,6 +22,10 @@
 | **Future Grid Labs** | **菲律賓** | 菲律賓在地 Casino API | C | PAGCOR 生態,核心地區 |
 | **SmartSoft Gaming** | 喬治亞/全球 | 內容 studio(JetX) | C | 透過聚合商觸達 |
 | **BlueOcean Gaming (Gamehub)** | 歐洲/全球 | 多供應商 API | C | 觀察 |
+| **Alea**(8/7 新增) | 馬爾他/全球 | API-first 聚合 | B | **同 Hub88:輕量基建=比價話術最對味** |
+| **SoftGamings**(8/7 新增) | 拉脫維亞/全球 | 白牌+聚合 | C | 與 SOFTSWISS 不同公司;觀察 |
+| **Pariplay (Fusion)**(8/7 新增) | 以色列/馬爾他 | Aristocrat/NeoGames 體系聚合 | C | 體量大決策慢,長線 |
+| **PWP.BET**(8/7 新增) | 全球,擴東南亞 | B2B 平台+支付/內容整合 | B | 8/4 宣布東南亞技支擴張,查到亞洲據點可升 A |
 
 ## 優先打法(按槓桿與可及性排序)
 

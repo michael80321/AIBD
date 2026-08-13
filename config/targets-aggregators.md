@@ -28,6 +28,10 @@
 | **PWP.BET**(8/7 新增) | 全球,擴東南亞 | B2B 平台+支付/內容整合 | B | 8/4 宣布東南亞技支擴張,查到亞洲據點可升 A |
 | **QTech Games**(8/8 新增) | 馬爾他,**亞洲深耕** | 新興市場聚合龍頭,QTech ONE 自有基建 | B | 亞洲下游契合;SPiCE 參展;兩層話術 |
 | **Agreegain**(8/8 新增) | 待查 | 小型聚合 | C | 觀察 |
+| **St8**(8/13 新增) | 愛沙尼亞 | 200+ 供應商單一 API,8/5 擴 Pragmatic 合作 | B | API-first;CEO Vladimir Negine |
+| **iGP**(8/13 新增) | 馬爾他 | 自有聚合器 | C | 觀察 |
+| **SYNOT Interactive**(8/13 新增) | 捷克 | 歐洲 7 市場聚合 | C | 亞洲契合弱 |
+| **SA Gaming**(8/13 新增,內容商) | **馬尼拉** | 亞洲 live casino 龍頭,7/28 入 SOFTSWISS | B | 直播基建大戶;IAG EXPO 可能參展 |
 
 ## 優先打法(按槓桿與可及性排序)
 

@@ -33,6 +33,8 @@
 | **SYNOT Interactive**(8/13 新增) | 捷克 | 歐洲 7 市場聚合 | C | 亞洲契合弱 |
 | **SA Gaming**(8/13 新增,內容商) | **馬尼拉** | 亞洲 live casino 龍頭,7/28 入 SOFTSWISS | B | 直播基建大戶;IAG EXPO 可能參展 |
 | **Infingame**(8/17 新增) | 基輔 | 200+ 供應商單一 API | C | 亞洲契合弱;觀察 |
+| **Celesta Tech**(8/18 新增) | 馬爾他(MGA)/中東 | PAM+聚合 7500+ 遊戲 | C | 中東線觀察 |
+| **Games Global**(8/20 新增) | 曼島/全球 | 前 Microgaming 分發體系,業界最大內容商之一 | B | 下游海量;長線經營 |
 
 ## 優先打法(按槓桿與可及性排序)
 

@@ -39,6 +39,7 @@
 | **Novusbet**(8/22 新增) | 賽普勒斯(Softquo) | sportsbook 平台商 | C | 歐洲觀察 |
 | **Dot Connections**(8/25 新增) | 待查,**亞洲聚焦** | one-API 聚合,DCACE 亞洲精選 | B | 亞洲下游契合;兩層話術 |
 | **Fanso.io**(8/31 新增,成人 AI 線) | 全球(待查) | 白牌 AI 伴侶/creator marketplace 方案商($1,500 一次性、5–6 天交付站) | B | 下游=新開站成人 AI 站長,GPU/CDN 轉介;XBIZ 週正對口 |
+| **PlugNPlay**(9/4 新增) | 待查 | 聚合平台:9/3 Playson 全球分發約 | C | 主體/地區待查後再定打法 |
 
 ## 優先打法(按槓桿與可及性排序)
 

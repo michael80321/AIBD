@@ -17,9 +17,25 @@ def titles(v, t):
     if 'AI' in v: return '創辦人/CTO/基礎設施負責人/算力負責人/採購'
     return '技術負責人/採購'
 def name(c): return re.sub(r'[\(（][^)）]*[)）]', '', c).strip() or c
+ALI_NAMES = ['阿里巴巴', '阿里雲', '阿里', '螞蟻', 'Alibaba', 'Ant Group', 'Ant ']
+# 必須是「投資關係」才算可引薦;單純團隊背景含阿里、或競合提及,都不算
+INVEST_CUES = ['領投', '參投', '投資', '跟投', '認購', '入股', 'led by', 'backed', 'invest']
 def ali(r):
     blob = r['signal'] + r['notes']
-    return '✅ 阿里系可引薦' if any(k in blob for k in ['阿里','螞蟻','Alibaba','Ant ','阿里雲']) else '—'
+    # 日報已明確標記「阿里系引薦:—」者,直接尊重該判斷(避免關鍵字誤判)
+    if '阿里系引薦:—' in blob or '阿里系引薦:-' in blob:
+        return '—'
+    for k in ALI_NAMES:
+        for m in _finditer(k, blob):
+            window = blob[max(0, m - 40): m + len(k) + 40]
+            if any(c in window for c in INVEST_CUES):
+                return '✅ 阿里系可引薦'
+    return '—'
+def _finditer(sub, s):
+    i = s.find(sub)
+    while i != -1:
+        yield i
+        i = s.find(sub, i + 1)
 cn = [r for r in rows if is_cn(r)]
 cn.sort(key=lambda r: ({'A':0,'B':1,'C':2}.get(r['score'],3), r.get('country','')))
 out = [f"# 大陸/華語窗口作戰卡 — 全部中文客戶(共 {len(cn)} 家)\n",
